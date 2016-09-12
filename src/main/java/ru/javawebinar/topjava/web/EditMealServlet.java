@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
-import ru.javawebinar.topjava.Repo.MemoryStorageDAO;
-import ru.javawebinar.topjava.Repo.StorageDAO;
+import ru.javawebinar.topjava.repository.MemoryStorageDAO;
+import ru.javawebinar.topjava.repository.StorageDAO;
 import ru.javawebinar.topjava.model.Meal;
 
 import javax.servlet.ServletException;
@@ -19,7 +19,10 @@ public class EditMealServlet extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+
+
+        String idString = request.getParameter("id");
+        int id = Integer.parseInt(idString);
         Meal meal = (Meal) storage.get(id);
         request.setAttribute("meal", meal);
         request.getRequestDispatcher("/editMealForm.jsp").forward(request, response);

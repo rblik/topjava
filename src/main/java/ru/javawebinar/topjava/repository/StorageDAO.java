@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.Repo;
+package ru.javawebinar.topjava.repository;
 
 import java.util.List;
 

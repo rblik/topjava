@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
-import ru.javawebinar.topjava.Repo.MemoryStorageDAO;
-import ru.javawebinar.topjava.Repo.StorageDAO;
+import ru.javawebinar.topjava.repository.MemoryStorageDAO;
+import ru.javawebinar.topjava.repository.StorageDAO;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -24,6 +24,10 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getParameter("remove")!=null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            storage.delete(id);
+        }
         @SuppressWarnings("unchecked")
         List<MealWithExceed> mealsWithExceeded = MealsUtil.getWithExceeded(storage.values(), 2000);
         request.setAttribute("meals", mealsWithExceeded);
