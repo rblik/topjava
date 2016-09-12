@@ -36,7 +36,7 @@ public class UpdateMealServlet extends HttpServlet {
         LocalDateTime localDateTime = LocalDateTime.parse(date);
         String idString = request.getParameter("id");
 
-        if (idString == null) {
+        if (idString.isEmpty()) {
             Meal meal = new Meal(localDateTime, description, calories);
             storage.add(meal);
         } else {

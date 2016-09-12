@@ -1,4 +1,5 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -19,10 +20,10 @@
 <body>
 <label style="font-size: large; color: blue">Change meal properties</label>
 <form action="edit" method="post" accept-charset="UTF-8">
-    <input type="hidden" name="id" value="${meal.id}">
-    <label for="description">Description</label><br><input id="description" type="text" name="description" value="${meal.description}"><br>
-    <label for="calories">Calories</label><br><input id="calories" type="text" name="calories" value="${meal.calories}"><br>
-    <label for="datetime">Datetime</label><br><input id="datetime" type="datetime-local" name="date" value="${meal.dateTime}"><br>
+    <input type="hidden" name="id" value="${(meal==null)? '' : meal.id}">
+    <label for="description">Description</label><br><input id="description" type="text" name="description" value="${(meal==null)? '' : meal.description}"><br>
+    <label for="calories">Calories</label><br><input id="calories" type="text" name="calories" value="${(meal==null)? '' : meal.calories}"><br>
+    <label for="datetime">Datetime</label><br><input id="datetime" type="datetime-local" name="date" value="${(meal==null)? '' : meal.dateTime}"><br>
     <input type="submit" value="Submit">
 </form>
 </body>

@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-<a href="createMealForm.jsp">Add meal</a>
+<a href="editMealForm.jsp">Add meal</a>
 
 <table>
     <tr class="header">
