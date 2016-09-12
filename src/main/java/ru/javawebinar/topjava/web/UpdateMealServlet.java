@@ -24,7 +24,7 @@ public class UpdateMealServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Meal meal = storage.get(id);
         request.setAttribute("meal", meal);
-        request.getRequestDispatcher("/editMealForm.jsp").forward(request, response);
+        request.getRequestDispatcher("/updateMealForm.jsp").forward(request, response);
     }
 
     @Override
