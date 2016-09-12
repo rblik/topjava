@@ -4,10 +4,10 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 public class MemoryStorageDAO implements StorageDAO<Meal> {
 
@@ -20,12 +20,12 @@ public class MemoryStorageDAO implements StorageDAO<Meal> {
 
     public static MemoryStorageDAO getInstance() {
         if (meals.isEmpty()) {
-            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
-            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
-            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
-            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
-            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+            INSTANCE.add(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
+            INSTANCE.add(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
+            INSTANCE.add(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
+            INSTANCE.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+            INSTANCE.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
+            INSTANCE.add(new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
         }
 
         return INSTANCE;
@@ -35,11 +35,13 @@ public class MemoryStorageDAO implements StorageDAO<Meal> {
 
     @Override
     public List<Meal> getAll() {
-        return meals.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(meals.values());
     }
 
     @Override
     public void add(Meal value) {
+        int i = count.incrementAndGet();
+        value.setId(i);
         meals.putIfAbsent(value.getId(), value);
     }
 
@@ -56,10 +58,5 @@ public class MemoryStorageDAO implements StorageDAO<Meal> {
     @Override
     public void update(Meal value) {
         meals.replace(value.getId(), value);
-    }
-
-    @Override
-    public int generateId() {
-        return count.incrementAndGet();
     }
 }

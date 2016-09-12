@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class UpdateMealServlet extends HttpServlet {
-    private static StorageDAO storage;
+    private static StorageDAO<Meal> storage;
 
     @Override
     public void init() throws ServletException {
@@ -22,7 +22,7 @@ public class UpdateMealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Meal meal = (Meal) storage.get(id);
+        Meal meal = storage.get(id);
         request.setAttribute("meal", meal);
         request.getRequestDispatcher("/editMealForm.jsp").forward(request, response);
     }
@@ -37,11 +37,12 @@ public class UpdateMealServlet extends HttpServlet {
         String idString = request.getParameter("id");
 
         if (idString == null) {
-            Meal meal = new Meal(storage.generateId(), localDateTime, description, calories);
+            Meal meal = new Meal(localDateTime, description, calories);
             storage.add(meal);
         } else {
             int id = Integer.parseInt(idString);
-            Meal meal = new Meal(id, localDateTime, description, calories);
+            Meal meal = new Meal(localDateTime, description, calories);
+            meal.setId(id);
             storage.update(meal);
         }
 

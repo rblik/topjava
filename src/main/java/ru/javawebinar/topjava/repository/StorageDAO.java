@@ -14,5 +14,4 @@ public interface StorageDAO<T> {
 
     void update(T value);
 
-    int generateId();
 }
