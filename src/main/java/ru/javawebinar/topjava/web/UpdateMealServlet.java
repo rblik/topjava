@@ -21,8 +21,14 @@ public class UpdateMealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Meal meal = storage.get(id);
+        String idString = request.getParameter("id");
+        Meal meal;
+        if (idString == null) {
+            meal = new Meal(null, null, 0);
+        } else {
+            meal = storage.get(Integer.parseInt(idString));
+        }
+
         request.setAttribute("meal", meal);
         request.getRequestDispatcher("/updateMealForm.jsp").forward(request, response);
     }
@@ -36,13 +42,12 @@ public class UpdateMealServlet extends HttpServlet {
         LocalDateTime localDateTime = LocalDateTime.parse(date);
         String idString = request.getParameter("id");
 
-        if (idString.isEmpty()) {
+        if (idString.equals("0")) {
             Meal meal = new Meal(localDateTime, description, calories);
             storage.save(meal);
         } else {
-            int id = Integer.parseInt(idString);
             Meal meal = new Meal(localDateTime, description, calories);
-            meal.setId(id);
+            meal.setId(Integer.parseInt(idString));
             storage.update(meal);
         }
 

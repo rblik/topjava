@@ -40,8 +40,7 @@ public class MemoryStorageDAO implements StorageDAO<Meal> {
 
     @Override
     public void save(Meal value) {
-        int i = count.incrementAndGet();
-        value.setId(i);
+        value.setId(count.incrementAndGet());
         meals.putIfAbsent(value.getId(), value);
     }
 
