@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface StorageDAO<T> {
 
-    List<T> values();
+    List<T> getAll();
 
     void add(T value);
 
@@ -12,6 +12,6 @@ public interface StorageDAO<T> {
 
     T get(int id);
 
-    void edit(T value);
+    void update(T value);
 
 }
