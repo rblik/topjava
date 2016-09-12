@@ -1,0 +1,60 @@
+package ru.javawebinar.topjava.Repo;
+
+import ru.javawebinar.topjava.model.Meal;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+public class MemoryStorageDAO implements StorageDAO<Meal> {
+
+    private static AtomicInteger count = new AtomicInteger(0);
+
+    private MemoryStorageDAO() {
+    }
+
+    private static final MemoryStorageDAO INSTANCE = new MemoryStorageDAO();
+
+    public static MemoryStorageDAO getInstance() {
+        if (meals.isEmpty()) {
+            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
+            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000));
+            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500));
+            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500));
+            INSTANCE.add(new Meal(count.incrementAndGet(), LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+        }
+
+        return INSTANCE;
+    }
+
+    private static final ConcurrentHashMap<Integer, Meal> meals = new ConcurrentHashMap<>();
+
+    @Override
+    public List<Meal> values() {
+        return meals.values().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public void add(Meal value) {
+        meals.putIfAbsent(value.getId(), value);
+    }
+
+    @Override
+    public void delete(int id) {
+        meals.remove(id);
+    }
+
+    @Override
+    public Meal get(int id) {
+        return meals.get(id);
+    }
+
+    @Override
+    public void edit(Meal value) {
+        meals.replace(value.getId(), value);
+    }
+}
