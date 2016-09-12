@@ -43,7 +43,7 @@
         <th>Delete</th>
     </tr>
     <c:forEach var="meal" items="${meals}">
-        <tr class="${(meal.exceed == true)? 'red' : 'green'}">
+        <tr class="${(meal.exceed)? 'red' : 'green'}">
             <c:set var="cleanedDateTime" value="${fn:replace(meal.dateTime, 'T', ' ')}"/>
             <td>${meal.id}</td>
             <td>${meal.description}</td>
