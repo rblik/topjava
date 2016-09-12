@@ -34,7 +34,7 @@ public class MemoryStorageDAO implements StorageDAO<Meal> {
     private static final ConcurrentHashMap<Integer, Meal> meals = new ConcurrentHashMap<>();
 
     @Override
-    public List<Meal> values() {
+    public List<Meal> getAll() {
         return meals.values().stream().collect(Collectors.toList());
     }
 
@@ -54,7 +54,7 @@ public class MemoryStorageDAO implements StorageDAO<Meal> {
     }
 
     @Override
-    public void edit(Meal value) {
+    public void update(Meal value) {
         meals.replace(value.getId(), value);
     }
 }

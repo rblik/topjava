@@ -25,7 +25,7 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         @SuppressWarnings("unchecked")
-        List<MealWithExceed> mealsWithExceeded = MealsUtil.getWithExceeded(storage.values(), 2000);
+        List<MealWithExceed> mealsWithExceeded = MealsUtil.getWithExceeded(storage.getAll(), 2000);
         request.setAttribute("meals", mealsWithExceeded);
         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
     }
@@ -39,7 +39,7 @@ public class MealServlet extends HttpServlet {
         String date = request.getParameter("date");
         LocalDateTime localDateTime = LocalDateTime.parse(date);
         Meal meal = new Meal(id, localDateTime, description, calories);
-        storage.edit(meal);
+        storage.update(meal);
         response.sendRedirect("meals");
     }
 }
