@@ -31,6 +31,8 @@
     </style>
 </head>
 <body>
+<a href="createMealForm.jsp">Add meal</a>
+
 <table>
     <tr class="header">
         <th>ID</th>
@@ -38,7 +40,7 @@
         <th>Calories</th>
         <th>Date</th>
         <th>Edit</th>
-        <th>Remove</th>
+        <th>Delete</th>
     </tr>
     <c:forEach var="meal" items="${meals}">
         <tr class="${(meal.exceed == true)? 'red' : 'green'}">
@@ -48,7 +50,7 @@
             <td>${meal.calories}</td>
             <td>${cleanedDateTime}</td>
             <td><a href="edit?id=${meal.id}">Edit</a></td>
-            <td><a href="meals?id=${meal.id}&remove">Remove</a></td>
+            <td><a href="meals?id=${meal.id}&remove">Delete</a></td>
         </tr>
     </c:forEach>
 </table>

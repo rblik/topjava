@@ -18,7 +18,7 @@
 </head>
 <body>
 <label style="font-size: large; color: blue">Change meal properties</label>
-<form action="meals" method="post" accept-charset="UTF-8">
+<form action="edit" method="post" accept-charset="UTF-8">
     <input type="hidden" name="id" value="${meal.id}">
     <label for="description">Description</label><br><input id="description" type="text" name="description" value="${meal.description}"><br>
     <label for="calories">Calories</label><br><input id="calories" type="text" name="calories" value="${meal.calories}"><br>
