@@ -6,7 +6,7 @@ public interface StorageDAO<T> {
 
     List<T> getAll();
 
-    void add(T value);
+    void save(T value);
 
     void delete(int id);
 

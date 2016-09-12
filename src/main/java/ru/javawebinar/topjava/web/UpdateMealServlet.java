@@ -38,7 +38,7 @@ public class UpdateMealServlet extends HttpServlet {
 
         if (idString.isEmpty()) {
             Meal meal = new Meal(localDateTime, description, calories);
-            storage.add(meal);
+            storage.save(meal);
         } else {
             int id = Integer.parseInt(idString);
             Meal meal = new Meal(localDateTime, description, calories);
