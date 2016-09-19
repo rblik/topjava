@@ -19,8 +19,36 @@
 <section>
     <h2><a href="index.html">Home</a></h2>
     <h3>Meal list</h3>
+    <h4>Hi, ${sessionScope["sessionUser"].name}</h4>
     <a href="meals?action=create">Add Meal</a>
     <hr>
+    <form method="post" action="meals?filter=date">
+        <table>
+            <tr>
+                <label>
+                    <td>Date from</td>
+                    <td><input type="date" name="dateFrom" value="${fn:now()}"></td>
+                </label>
+                <label>
+                    <td>Time from</td>
+                    <td><input type="time" name="timeFrom" value="${fn:now()}"></td>
+                </label>
+            </tr>
+            <tr>
+                <label>
+                    <td>Date until</td>
+                    <td><input type="date" name="dateUntil" value="${fn:now()}"></td>
+                </label>
+                <label>
+                    <td>Time until</td>
+                    <td><input type="time" name="timeUntil" value="${fn:now()}"></td>
+                </label>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit"></td>
+            </tr>
+        </table>
+    </form>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -32,7 +60,7 @@
         </tr>
         </thead>
         <c:forEach items="${mealList}" var="meal">
-            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.to.MealWithExceed"/>
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
