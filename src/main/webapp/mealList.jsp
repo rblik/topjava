@@ -24,24 +24,30 @@
     <hr>
     <form method="post" action="meals?filter=date">
         <table>
+            <tr></tr>
+            <tr align="center"><td colspan="4">Date period</td></tr>
+            <tr></tr>
             <tr>
                 <label>
                     <td>Date from</td>
-                    <td><input type="date" name="dateFrom" value="${fn:now()}"></td>
+                    <td><input type="date" name="dateFrom" value="${fn:dateNow()}"></td>
                 </label>
-                <label>
-                    <td>Time from</td>
-                    <td><input type="time" name="timeFrom" value="${fn:now()}"></td>
-                </label>
-            </tr>
-            <tr>
                 <label>
                     <td>Date until</td>
-                    <td><input type="date" name="dateUntil" value="${fn:now()}"></td>
+                    <td><input type="date" name="dateUntil" value="${fn:dateNow()}"></td>
+                </label>
+            </tr>
+            <tr></tr>
+            <tr align="center"><td colspan="4">Time of day</td></tr>
+            <tr></tr>
+            <tr>
+                <label>
+                    <td>Time from</td>
+                    <td><input type="time" name="timeFrom" value="06:00"></td>
                 </label>
                 <label>
                     <td>Time until</td>
-                    <td><input type="time" name="timeUntil" value="${fn:now()}"></td>
+                    <td><input type="time" name="timeUntil" value="22:00"></td>
                 </label>
             </tr>
             <tr>

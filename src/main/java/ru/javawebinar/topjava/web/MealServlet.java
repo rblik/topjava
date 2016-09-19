@@ -78,10 +78,11 @@ public class MealServlet extends HttpServlet {
                     LocalTime beginTime = LocalTime.parse(ltBegin);
                     LocalTime endTime = LocalTime.parse(ltEnd);
 
+                    //DTO типа LocalDateTime, хотя время - интервал в одном дне а дата это дата. криво :(
                     LocalDateTime beginDateTime = LocalDateTime.of(beginDate, beginTime);
                     LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
 
-                    if (beginDateTime.isBefore(endDateTime)) {
+                    if (beginDate.isBefore(endDate) && beginTime.isBefore(endTime)) {
                         request.setAttribute("mealList", mealRestController.getFilteredByDate(userId, beginDateTime, endDateTime));
                         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
                     } else {

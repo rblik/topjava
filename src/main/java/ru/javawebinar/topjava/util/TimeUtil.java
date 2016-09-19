@@ -24,7 +24,7 @@ public class TimeUtil {
         return ldt == null ? "" : ldt.format(DATE_TME_FORMATTER);
     }
 
-    public static LocalDate now() {
+    public static LocalDate dateNow() {
         return LocalDate.now();
     }
 }

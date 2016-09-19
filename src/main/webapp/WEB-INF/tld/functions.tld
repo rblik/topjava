@@ -14,8 +14,8 @@
         <function-signature>java.lang.String toString(java.time.LocalDateTime)</function-signature>
     </function>
     <function>
-        <name>now</name>
+        <name>dateNow</name>
         <function-class>ru.javawebinar.topjava.util.TimeUtil</function-class>
-        <function-signature>java.time.LocalDate now()</function-signature>
+        <function-signature>java.time.LocalDate dateNow()</function-signature>
     </function>
 </taglib>
