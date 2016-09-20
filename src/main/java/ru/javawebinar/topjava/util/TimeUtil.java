@@ -27,4 +27,12 @@ public class TimeUtil {
     public static LocalDate dateNow() {
         return LocalDate.now();
     }
+
+    public static LocalDate checkDate(String localDateStr, LocalDate borderDate) {
+        return (localDateStr == null || localDateStr.isEmpty()) ? borderDate : LocalDate.parse(localDateStr);
+    }
+
+    public static LocalTime checkTime(String localTimeStr, LocalTime borderTime) {
+        return (localTimeStr == null || localTimeStr.isEmpty()) ? borderTime : LocalTime.parse(localTimeStr);
+    }
 }

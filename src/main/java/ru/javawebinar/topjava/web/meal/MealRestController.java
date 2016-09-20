@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.to.MealWithExceed;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
@@ -28,13 +29,8 @@ public class MealRestController {
 
     private int userId;
 
-    public void setSession(HttpSession tlSession) {
-        this.session = tlSession;
-
-    }
-
-    public HttpSession getSession() {
-        return this.session;
+    public void setSession(HttpSession session) {
+        this.session = session;
     }
 
     public Meal save(Meal meal) {
@@ -66,10 +62,11 @@ public class MealRestController {
     }
 
     public List<MealWithExceed> getFilteredByDateAndTime(int userId, String beginDateStr, String endDateStr, String beginTimeStr, String endTimeStr) {
-        LocalDate beginDate = beginDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(beginDateStr);
-        LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDateStr);
-        LocalTime beginTime = beginTimeStr.isEmpty() ? LocalTime.MIN : LocalTime.parse(beginTimeStr);
-        LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTimeStr);
+        LocalDate beginDate = TimeUtil.checkDate(beginDateStr, LocalDate.MIN);
+        LocalDate endDate = TimeUtil.checkDate(endDateStr, LocalDate.MAX);
+        LocalTime beginTime = TimeUtil.checkTime(beginTimeStr, LocalTime.MIN);
+        LocalTime endTime = TimeUtil.checkTime(endTimeStr, LocalTime.MAX);
+
         if (beginDate.isAfter(endDate) || beginTime.isAfter(endTime) || userId == -1) {
             return Collections.emptyList();
         } else {
