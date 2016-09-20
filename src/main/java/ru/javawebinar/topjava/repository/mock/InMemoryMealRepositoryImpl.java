@@ -23,8 +23,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        //Fill the map initially. don't care about userId here, it doesn't go anywhere
-        MealsUtil.MEALS.forEach(meal -> this.save(meal, 1));
+        MealsUtil.MEALS.forEach(meal -> this.save(meal, meal.getUserId()));
     }
 
     @Override
