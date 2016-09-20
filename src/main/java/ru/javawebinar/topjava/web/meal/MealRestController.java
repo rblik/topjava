@@ -3,10 +3,12 @@ package ru.javawebinar.topjava.web.meal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.to.MealWithExceed;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
@@ -22,19 +24,40 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-    public Meal save(Meal meal, int userId) {
+    private HttpSession session;
+
+    private int userId;
+
+    public void setSession(HttpSession tlSession) {
+        this.session = tlSession;
+
+    }
+
+    public HttpSession getSession() {
+        return this.session;
+    }
+
+    public Meal save(Meal meal) {
+        userId = this.getUserId();
+
         return service.save(meal, userId);
     }
 
-    public void delete(int id, int userId) {
+    public void delete(int id) {
+        userId = this.getUserId();
+
         service.delete(id, userId);
     }
 
-    public Meal get(int id, int userId) {
+    public Meal get(int id) {
+        userId = this.getUserId();
+
         return service.get(id, userId);
     }
 
-    public List<MealWithExceed> getAll(int userId) {
+    public List<MealWithExceed> getAll() {
+        userId = this.getUserId();
+
         if (userId == -1) {
             return Collections.emptyList();
         } else {
@@ -52,5 +75,10 @@ public class MealRestController {
         } else {
             return MealsUtil.getFilteredWithExceeded(service.getFilteredByDate(userId, beginDate, endDate), beginTime, endTime, MealsUtil.DEFAULT_CALORIES_PER_DAY);
         }
+    }
+
+    public int getUserId() {
+        Object sessionUser = session.getAttribute("sessionUser");
+        return (sessionUser == null) ? -1 : ((User) sessionUser).getId();
     }
 }

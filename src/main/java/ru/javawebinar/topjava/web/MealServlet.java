@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -40,30 +41,31 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        String userIdStr = request.getParameter("userId");
+        HttpSession session = request.getSession();
+        mealRestController.setSession(request.getSession());
 
+
+        String userIdStr = request.getParameter("userId");
+        System.out.println(userIdStr);
         if (userIdStr != null) {
             int userId = Integer.valueOf(userIdStr);
             User user = adminRestController.get(userId);
 
-
             if (user != null) {
-                request.getSession().setAttribute("sessionUser", user);
+                session.setAttribute("sessionUser", user);
+
                 response.sendRedirect("meals");
             }
 
         } else {
-            Object sessionUser = request.getSession().getAttribute("sessionUser");
-
-            int userId = (sessionUser == null) ? -1 : ((User) sessionUser).getId();
-
-            //branching out to filtering
             if (request.getParameter("filter") != null) {
+                //branching out to filtering
                 String ldBegin = request.getParameter("dateFrom");
                 String ldEnd = request.getParameter("dateUntil");
                 String ltBegin = request.getParameter("timeFrom");
                 String ltEnd = request.getParameter("timeUntil");
-                request.setAttribute("mealList", mealRestController.getFilteredByDateAndTime(userId, ldBegin, ldEnd, ltBegin, ltEnd));
+
+                request.setAttribute("mealList", mealRestController.getFilteredByDateAndTime(mealRestController.getUserId(), ldBegin, ldEnd, ltBegin, ltEnd));
                 request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 
             } else {
@@ -72,9 +74,9 @@ public class MealServlet extends HttpServlet {
                 Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                         LocalDateTime.parse(request.getParameter("dateTime")),
                         request.getParameter("description"),
-                        Integer.valueOf(request.getParameter("calories")), userId);
+                        Integer.valueOf(request.getParameter("calories")), mealRestController.getUserId());
                 LOG.info(meal.getId() == null ? "Create {}" : "Update {}", meal);
-                mealRestController.save(meal, userId);
+                mealRestController.save(meal);
                 response.sendRedirect("meals");
             }
         }
@@ -83,28 +85,26 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        Object sessionUser = request.getSession().getAttribute("sessionUser");
-
-        int userId = (sessionUser == null) ? -1 : ((User) sessionUser).getId();
+        mealRestController.setSession(request.getSession());
 
         String action = request.getParameter("action");
 
         if (action == null) {
             LOG.info("getAll");
             request.setAttribute("mealList",
-                    mealRestController.getAll(userId));
+                    mealRestController.getAll());
             request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
             int id = getId(request);
             LOG.info("Delete {}", id);
-            mealRestController.delete(id, userId);
+            mealRestController.delete(id);
             response.sendRedirect("meals");
 
         } else if ("create".equals(action) || "update".equals(action)) {
             final Meal meal = action.equals("create") ?
-                    new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000, userId) :
-                    mealRestController.get(getId(request), userId);
+                    new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000, mealRestController.getUserId()) :
+                    mealRestController.get(getId(request));
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("mealEdit.jsp").forward(request, response);
         }
@@ -113,14 +113,6 @@ public class MealServlet extends HttpServlet {
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.valueOf(paramId);
-    }
-
-    private boolean notNullDateData(String ldBegin, String ldEnd, String ltBegin, String ltEnd) {
-        return ldBegin != null && ldEnd != null && ltBegin != null && ltEnd != null;
-    }
-
-    private boolean appropriateDateData(String ldBegin, String ldEnd, String ltBegin, String ltEnd) {
-        return !ldBegin.isEmpty() && !ldEnd.isEmpty() && !ltBegin.isEmpty() && !ltEnd.isEmpty();
     }
 
     @Override

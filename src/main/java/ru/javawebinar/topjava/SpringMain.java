@@ -2,11 +2,9 @@ package ru.javawebinar.topjava;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
@@ -23,10 +21,10 @@ public class SpringMain {
             adminUserController.getAll().forEach(System.out::println);
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.save(new Meal(LocalDateTime.now(), "Borsh", 1000, 1), 3);
+//            mealRestController.save(new Meal(LocalDateTime.now(), "Borsh", 1000, 1), 3);
 
 
-            mealRestController.getAll(1).forEach(System.out::println);
+//            mealRestController.getAll(1).forEach(System.out::println);
         }
     }
 }
