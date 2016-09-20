@@ -29,7 +29,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }*/
 
     public InMemoryUserRepositoryImpl() {
-        repository = new ConcurrentHashMap<Integer, User>(){{
+        repository = new ConcurrentHashMap<Integer, User>() {{
             put(1, new User(1, "Admin", "admin@user.com", "password", Role.ROLE_ADMIN, Role.ROLE_ADMIN));
             put(2, new User(2, "User", "email@user.com", "password", Role.ROLE_USER, Role.ROLE_USER));
         }};
@@ -44,8 +44,8 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         LOG.info("save " + user);
-        repository.put(counter.incrementAndGet(), user);
-        return user;
+        return (user.getId() == null || !repository.containsKey(user.getId())) ?
+                repository.put(counter.incrementAndGet(), user) : repository.put(user.getId(), user);
     }
 
     @Override
