@@ -35,30 +35,23 @@ public class MealRestController {
 
     public Meal save(Meal meal) {
         userId = this.getUserId();
-
         return service.save(meal, userId);
     }
 
     public void delete(int id) {
         userId = this.getUserId();
-
         service.delete(id, userId);
     }
 
     public Meal get(int id) {
         userId = this.getUserId();
-
         return service.get(id, userId);
     }
 
     public List<MealWithExceed> getAll() {
         userId = this.getUserId();
-
-        if (userId == -1) {
-            return Collections.emptyList();
-        } else {
-            return MealsUtil.getWithExceeded(service.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY);
-        }
+        return (userId == -1) ? Collections.emptyList() :
+                MealsUtil.getWithExceeded(service.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public List<MealWithExceed> getFilteredByDateAndTime(int userId, String beginDateStr, String endDateStr, String beginTimeStr, String endTimeStr) {

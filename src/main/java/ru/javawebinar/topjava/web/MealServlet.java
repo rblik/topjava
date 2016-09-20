@@ -46,7 +46,6 @@ public class MealServlet extends HttpServlet {
 
 
         String userIdStr = request.getParameter("userId");
-        System.out.println(userIdStr);
         if (userIdStr != null) {
             int userId = Integer.valueOf(userIdStr);
             User user = adminRestController.get(userId);
