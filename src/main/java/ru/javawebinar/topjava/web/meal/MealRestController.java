@@ -69,7 +69,7 @@ public class MealRestController {
         LocalDate beginDate = beginDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(beginDateStr);
         LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDateStr);
         LocalTime beginTime = beginTimeStr.isEmpty() ? LocalTime.MIN : LocalTime.parse(beginTimeStr);
-        LocalTime endTime = beginTimeStr.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTimeStr);
+        LocalTime endTime = endTimeStr.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTimeStr);
         if (beginDate.isAfter(endDate) || beginTime.isAfter(endTime) || userId == -1) {
             return Collections.emptyList();
         } else {
