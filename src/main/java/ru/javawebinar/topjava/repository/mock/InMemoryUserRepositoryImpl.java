@@ -44,11 +44,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         return true;
     }
 
-    public static void main(String[] args) {
-        InMemoryUserRepositoryImpl repository = new InMemoryUserRepositoryImpl();
-        System.out.println(repository.delete(1));
-    }
-
     @Override
     public User save(User user) {
         LOG.info("save " + user);

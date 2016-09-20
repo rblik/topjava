@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -42,55 +40,31 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        //Если есть наличие этого параметра в запросе - значит попытка залогиниться
         String userIdStr = request.getParameter("userId");
 
         if (userIdStr != null) {
             int userId = Integer.valueOf(userIdStr);
             User user = adminRestController.get(userId);
 
-            //Зачем проверяю, сам не знаю. ведь пересылаем на Get
-            // а там exception оно и так кидает при неверном userId.
-            // Решил на всякий случай, на будущее, так как прийти может любой id.
+
             if (user != null) {
                 request.getSession().setAttribute("sessionUser", user);
                 response.sendRedirect("meals");
             }
 
-            //в противном случае понимаем, что чел был уже на страничке с авторизацией
         } else {
             Object sessionUser = request.getSession().getAttribute("sessionUser");
 
-            //Если юзер был, но не авторизовался, то ложим в переменную "-1" и передаем на репозиторий,
-            // где оно сразу проверится и возвратит null, а сервис кинет эксепшн
             int userId = (sessionUser == null) ? -1 : ((User) sessionUser).getId();
 
-            String ldBegin = request.getParameter("dateFrom");
-            String ldEnd = request.getParameter("dateUntil");
-            String ltBegin = request.getParameter("timeFrom");
-            String ltEnd = request.getParameter("timeUntil");
-
-            //Ответвляемся при наличии запроса по фильтру
-            if (notNullDateData(ldBegin, ldEnd, ltBegin, ltEnd)) {
-                if (appropriateDateData(ldBegin, ldEnd, ltBegin, ltEnd)) {
-                    LocalDate beginDate = LocalDate.parse(ldBegin);
-                    LocalDate endDate = LocalDate.parse(ldEnd);
-                    LocalTime beginTime = LocalTime.parse(ltBegin);
-                    LocalTime endTime = LocalTime.parse(ltEnd);
-
-                    //DTO типа LocalDateTime, хотя время - интервал в одном дне а дата это дата. криво :(
-                    LocalDateTime beginDateTime = LocalDateTime.of(beginDate, beginTime);
-                    LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
-
-                    if (beginDate.isBefore(endDate) && beginTime.isBefore(endTime)) {
-                        request.setAttribute("mealList", mealRestController.getFilteredByDate(userId, beginDateTime, endDateTime));
-                        request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-                    } else {
-                        response.sendRedirect("meals");
-                    }
-                } else {
-                    response.sendRedirect("meals");
-                }
+            //branching out to filtering
+            if (request.getParameter("filter") != null) {
+                String ldBegin = request.getParameter("dateFrom");
+                String ldEnd = request.getParameter("dateUntil");
+                String ltBegin = request.getParameter("timeFrom");
+                String ltEnd = request.getParameter("timeUntil");
+                request.setAttribute("mealList", mealRestController.getFilteredByDateAndTime(userId, ldBegin, ldEnd, ltBegin, ltEnd));
+                request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 
             } else {
                 String id = request.getParameter("id");
@@ -100,7 +74,7 @@ public class MealServlet extends HttpServlet {
                         request.getParameter("description"),
                         Integer.valueOf(request.getParameter("calories")), userId);
                 LOG.info(meal.getId() == null ? "Create {}" : "Update {}", meal);
-                mealRestController.save(meal);
+                mealRestController.save(meal, userId);
                 response.sendRedirect("meals");
             }
         }
@@ -111,9 +85,6 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         Object sessionUser = request.getSession().getAttribute("sessionUser");
 
-        //Если юзер не авторизован то ложим в переменную "-1" и передаем нв репозитори,
-        // где оно сразу проверится и возвратит null, а сервис кинет эксепшн
-        // или в случае getAll вернет пустой список (все сделал в контроллере)
         int userId = (sessionUser == null) ? -1 : ((User) sessionUser).getId();
 
         String action = request.getParameter("action");

@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
         return repository.getAll();
     }
 
+    @Override
     public void update(User user) {
         repository.save(user);
     }

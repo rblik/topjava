@@ -7,7 +7,8 @@ import ru.javawebinar.topjava.model.to.MealWithExceed;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-    public Meal save(Meal meal) {
-        return service.save(meal);
+    public Meal save(Meal meal, int userId) {
+        return service.save(meal, userId);
     }
 
     public void delete(int id, int userId) {
@@ -41,13 +42,15 @@ public class MealRestController {
         }
     }
 
-    public List<MealWithExceed> getFilteredByDate(int userId, LocalDateTime beginDateTime, LocalDateTime endDateTime) {
-        if (userId == -1) {
+    public List<MealWithExceed> getFilteredByDateAndTime(int userId, String beginDateStr, String endDateStr, String beginTimeStr, String endTimeStr) {
+        LocalDate beginDate = beginDateStr.isEmpty() ? LocalDate.MIN : LocalDate.parse(beginDateStr);
+        LocalDate endDate = endDateStr.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDateStr);
+        LocalTime beginTime = beginTimeStr.isEmpty() ? LocalTime.MIN : LocalTime.parse(beginTimeStr);
+        LocalTime endTime = beginTimeStr.isEmpty() ? LocalTime.MAX : LocalTime.parse(endTimeStr);
+        if (beginDate.isAfter(endDate) || beginTime.isAfter(endTime) || userId == -1) {
             return Collections.emptyList();
         } else {
-            System.out.println();
-            List<Meal> filteredByDate = service.getFilteredByDate(userId, beginDateTime.toLocalDate(), endDateTime.toLocalDate());
-            return MealsUtil.getFilteredWithExceeded(filteredByDate, beginDateTime.toLocalTime(), endDateTime.toLocalTime(), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+            return MealsUtil.getFilteredWithExceeded(service.getFilteredByDate(userId, beginDate, endDate), beginTime, endTime, MealsUtil.DEFAULT_CALORIES_PER_DAY);
         }
     }
 }

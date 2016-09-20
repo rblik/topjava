@@ -30,11 +30,11 @@
             <tr>
                 <label>
                     <td>Date from</td>
-                    <td><input type="date" name="dateFrom" value="${fn:dateNow()}"></td>
+                    <td><input type="date" name="dateFrom" value=""></td>
                 </label>
                 <label>
                     <td>Date until</td>
-                    <td><input type="date" name="dateUntil" value="${fn:dateNow()}"></td>
+                    <td><input type="date" name="dateUntil" value=""></td>
                 </label>
             </tr>
             <tr></tr>

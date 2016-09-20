@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface MealService {
 
-    Meal save(Meal meal);
+    Meal save(Meal meal, int userId);
 
     void delete(int id, int userId);
 

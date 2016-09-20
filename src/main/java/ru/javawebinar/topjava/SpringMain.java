@@ -19,14 +19,13 @@ public class SpringMain {
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            //Выйдет 2 юзера, которых я создал изначально
+            //will show two users
             adminUserController.getAll().forEach(System.out::println);
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            mealRestController.save(new Meal(LocalDateTime.now(), "Borsh", 1000, 1));
-            //Новый meal получит id = 13
-            // так как при инициализации обьекта InMemoryMealRepositoryImpl
-            // список изначально заполняется 12 хавчиками
+            mealRestController.save(new Meal(LocalDateTime.now(), "Borsh", 1000, 1), 3);
+
+
             mealRestController.getAll(1).forEach(System.out::println);
         }
     }
