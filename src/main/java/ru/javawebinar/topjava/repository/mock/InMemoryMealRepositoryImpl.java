@@ -45,10 +45,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        if (repository.get(id) ==null || repository.get(id).getUserId()!=userId) return null;
-        else {
-            return repository.get(id);
-        }
+        return (repository.get(id) ==null || repository.get(id).getUserId()!=userId) ? null : repository.get(id);
     }
 
     @Override
