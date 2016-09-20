@@ -27,11 +27,17 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal save(Meal meal,  int userId) {
-        if (meal.getUserId() == -1 || repository.get(meal.getId()).getUserId()!=userId) {
+    public Meal save(Meal meal, int userId) {
+        if (meal.getUserId() == -1 || meal.getUserId() != userId) {
             return null;
-        } else if (meal.getId()==null) {
+
+            //if creation
+        } else if (meal.getId() == null) {
             meal.setId(counter.incrementAndGet());
+
+            //if update
+        } else if (repository.get(meal.getId()).getUserId() != userId) {
+            return null;
         }
         repository.put(meal.getId(), meal);
         return meal;
@@ -44,14 +50,14 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return (repository.get(id) ==null || repository.get(id).getUserId()!=userId) ? null : repository.get(id);
+        return (repository.get(id) == null || repository.get(id).getUserId() != userId) ? null : repository.get(id);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return  repository.values()
+        return repository.values()
                 .stream()
-                .filter(meal -> meal.getUserId()==userId)
+                .filter(meal -> meal.getUserId() == userId)
                 .sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
                 .collect(Collectors.toList());
     }
