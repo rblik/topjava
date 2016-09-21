@@ -38,11 +38,12 @@ public class MealServlet extends HttpServlet {
         mealRestController = appCtx.getBean(MealRestController.class);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-
         HttpSession session = request.getSession();
-        mealRestController.setSession(request.getSession());
+
+        mealRestController.setSession(session);
 
         String userIdStr = request.getParameter("userId");
         if (userIdStr != null) {
@@ -78,9 +79,10 @@ public class MealServlet extends HttpServlet {
         }
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         request.setCharacterEncoding("UTF-8");
+
         mealRestController.setSession(request.getSession());
 
         String action = request.getParameter("action");

@@ -72,7 +72,7 @@ public class MealRestController {
         }
     }
 
-    public int getUserId() {
+    private int getUserId() {
         Object sessionUser = session.getAttribute("sessionUser");
         return (sessionUser == null) ? -1 : ((User) sessionUser).getId();
     }

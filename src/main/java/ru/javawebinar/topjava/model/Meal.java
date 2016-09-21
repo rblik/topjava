@@ -9,8 +9,6 @@ import java.time.LocalTime;
  * 11.01.2015.
  */
 public class Meal extends BaseEntity {
-    private Integer id;
-
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -67,6 +65,7 @@ public class Meal extends BaseEntity {
         return dateTime.toLocalTime();
     }
 
+    @Override
     public boolean isNew() {
         return id == null;
     }
