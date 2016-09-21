@@ -57,17 +57,16 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return repository.values()
-                .stream()
-                .filter(meal -> meal.getUserId() == userId)
-                .sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
-                .collect(Collectors.toList());
+        return this.getAllFilterByDate(userId, LocalDate.MIN, LocalDate.MAX);
     }
 
     @Override
     public List<Meal> getAllFilterByDate(int userId, LocalDate startDate, LocalDate endDate) {
-        return this.getAll(userId).stream()
+        return repository.values()
+                .stream()
+                .filter(meal -> meal.getUserId() == userId)
                 .filter(meal -> TimeUtil.isBetween(meal.getDate(), startDate, endDate))
+                .sorted((meal1, meal2) -> meal2.getDateTime().compareTo(meal1.getDateTime()))
                 .collect(Collectors.toList());
     }
 }

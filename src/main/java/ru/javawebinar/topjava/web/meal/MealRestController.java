@@ -29,40 +29,35 @@ public class MealRestController {
 
     private int userId;
 
-    public void setSession(HttpSession session) {
-        this.session = session;
+    public void setUserId (int userId) {
+        this.userId = userId;
     }
 
     public Meal save(Meal meal) {
-        userId = this.getUserId();
         meal.setUserId(userId);
         return service.save(meal, userId);
     }
 
     public void delete(int id) {
-        userId = this.getUserId();
         service.delete(id, userId);
     }
 
     public Meal get(int id) {
-        userId = this.getUserId();
         return service.get(id, userId);
     }
 
     public List<MealWithExceed> getAll() {
-        userId = this.getUserId();
         return (userId == -1) ? Collections.emptyList() :
                 MealsUtil.getWithExceeded(service.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public List<MealWithExceed> getFilteredByDateAndTime(String beginDateStr, String endDateStr,
                                                          String beginTimeStr, String endTimeStr) {
-        userId = this.getUserId();
 
-        LocalDate beginDate = TimeUtil.checkDate(beginDateStr, LocalDate.MIN);
-        LocalDate endDate = TimeUtil.checkDate(endDateStr, LocalDate.MAX);
-        LocalTime beginTime = TimeUtil.checkTime(beginTimeStr, LocalTime.MIN);
-        LocalTime endTime = TimeUtil.checkTime(endTimeStr, LocalTime.MAX);
+        LocalDate beginDate = TimeUtil.parseDate(beginDateStr, LocalDate.MIN);
+        LocalDate endDate = TimeUtil.parseDate(endDateStr, LocalDate.MAX);
+        LocalTime beginTime = TimeUtil.parseTime(beginTimeStr, LocalTime.MIN);
+        LocalTime endTime = TimeUtil.parseTime(endTimeStr, LocalTime.MAX);
 
         if (beginDate.isAfter(endDate) || beginTime.isAfter(endTime) || userId == -1) {
             return Collections.emptyList();
@@ -70,10 +65,5 @@ public class MealRestController {
             return MealsUtil.getFilteredWithExceeded(service.getFilteredByDate(userId, beginDate, endDate),
                     beginTime, endTime, MealsUtil.DEFAULT_CALORIES_PER_DAY);
         }
-    }
-
-    private int getUserId() {
-        Object sessionUser = session.getAttribute("sessionUser");
-        return (sessionUser == null) ? -1 : ((User) sessionUser).getId();
     }
 }

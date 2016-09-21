@@ -28,11 +28,11 @@ public class TimeUtil {
         return LocalDate.now();
     }
 
-    public static LocalDate checkDate(String localDate, LocalDate borderDate) {
+    public static LocalDate parseDate(String localDate, LocalDate borderDate) {
         return (localDate == null || localDate.isEmpty()) ? borderDate : LocalDate.parse(localDate);
     }
 
-    public static LocalTime checkTime(String localTime, LocalTime borderTime) {
+    public static LocalTime parseTime(String localTime, LocalTime borderTime) {
         return (localTime == null || localTime.isEmpty()) ? borderTime : LocalTime.parse(localTime);
     }
 }

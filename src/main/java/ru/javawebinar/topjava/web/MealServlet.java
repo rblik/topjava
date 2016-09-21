@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -41,9 +40,9 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession();
+        Object sessionUser = request.getSession().getAttribute("sessionUser");
 
-        mealRestController.setSession(session);
+        mealRestController.setUserId((sessionUser == null) ? -1 : ((User) sessionUser).getId());
 
         String userIdStr = request.getParameter("userId");
         if (userIdStr != null) {
@@ -51,7 +50,8 @@ public class MealServlet extends HttpServlet {
             User user = adminRestController.get(userId);
 
             if (user != null) {
-                session.setAttribute("sessionUser", user);
+                request.getSession().setAttribute("sessionUser", user);
+                mealRestController.setUserId(user.getId());
                 response.sendRedirect("meals");
             }
         } else {
@@ -83,7 +83,8 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        mealRestController.setSession(request.getSession());
+        Object sessionUser = request.getSession().getAttribute("sessionUser");
+        mealRestController.setUserId((sessionUser == null) ? -1 : ((User) sessionUser).getId());
 
         String action = request.getParameter("action");
 
