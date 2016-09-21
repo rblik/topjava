@@ -28,7 +28,9 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        if (meal.getUserId() == -1 || meal.getUserId() != userId) {
+
+//        if unauthorised
+        if (meal.getUserId() == -1) {
             return null;
 
             //if creation

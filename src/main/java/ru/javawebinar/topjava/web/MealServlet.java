@@ -44,7 +44,6 @@ public class MealServlet extends HttpServlet {
         HttpSession session = request.getSession();
         mealRestController.setSession(request.getSession());
 
-
         String userIdStr = request.getParameter("userId");
         if (userIdStr != null) {
             int userId = Integer.valueOf(userIdStr);
@@ -52,10 +51,8 @@ public class MealServlet extends HttpServlet {
 
             if (user != null) {
                 session.setAttribute("sessionUser", user);
-
                 response.sendRedirect("meals");
             }
-
         } else {
             if (request.getParameter("filter") != null) {
                 //branching out to filtering
@@ -64,7 +61,7 @@ public class MealServlet extends HttpServlet {
                 String ltBegin = request.getParameter("timeFrom");
                 String ltEnd = request.getParameter("timeUntil");
 
-                request.setAttribute("mealList", mealRestController.getFilteredByDateAndTime(mealRestController.getUserId(), ldBegin, ldEnd, ltBegin, ltEnd));
+                request.setAttribute("mealList", mealRestController.getFilteredByDateAndTime(ldBegin, ldEnd, ltBegin, ltEnd));
                 request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 
             } else {
@@ -73,7 +70,7 @@ public class MealServlet extends HttpServlet {
                 Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                         LocalDateTime.parse(request.getParameter("dateTime")),
                         request.getParameter("description"),
-                        Integer.valueOf(request.getParameter("calories")), mealRestController.getUserId());
+                        Integer.valueOf(request.getParameter("calories")));
                 LOG.info(meal.getId() == null ? "Create {}" : "Update {}", meal);
                 mealRestController.save(meal);
                 response.sendRedirect("meals");
@@ -102,7 +99,7 @@ public class MealServlet extends HttpServlet {
 
         } else if ("create".equals(action) || "update".equals(action)) {
             final Meal meal = action.equals("create") ?
-                    new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000, mealRestController.getUserId()) :
+                    new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
                     mealRestController.get(getId(request));
             request.setAttribute("meal", meal);
             request.getRequestDispatcher("mealEdit.jsp").forward(request, response);

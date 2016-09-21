@@ -23,11 +23,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private AtomicInteger counter = new AtomicInteger(0);
     private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
 
-    /*{
-        this.save(new User(1, "Admin", "admin@user.com", "password", Role.ROLE_ADMIN, null));
-        this.save(new User(2, "User", "email@user.com", "password", Role.ROLE_USER, null));
-    }*/
-
     public InMemoryUserRepositoryImpl() {
         repository = new ConcurrentHashMap<Integer, User>() {{
             put(1, new User(1, "Admin", "admin@user.com", "password", Role.ROLE_ADMIN, Role.ROLE_ADMIN));

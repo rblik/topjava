@@ -35,6 +35,7 @@ public class MealRestController {
 
     public Meal save(Meal meal) {
         userId = this.getUserId();
+        meal.setUserId(userId);
         return service.save(meal, userId);
     }
 
@@ -54,7 +55,10 @@ public class MealRestController {
                 MealsUtil.getWithExceeded(service.getAll(userId), MealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-    public List<MealWithExceed> getFilteredByDateAndTime(int userId, String beginDateStr, String endDateStr, String beginTimeStr, String endTimeStr) {
+    public List<MealWithExceed> getFilteredByDateAndTime(String beginDateStr, String endDateStr,
+                                                         String beginTimeStr, String endTimeStr) {
+        userId = this.getUserId();
+
         LocalDate beginDate = TimeUtil.checkDate(beginDateStr, LocalDate.MIN);
         LocalDate endDate = TimeUtil.checkDate(endDateStr, LocalDate.MAX);
         LocalTime beginTime = TimeUtil.checkTime(beginTimeStr, LocalTime.MIN);
@@ -63,7 +67,8 @@ public class MealRestController {
         if (beginDate.isAfter(endDate) || beginTime.isAfter(endTime) || userId == -1) {
             return Collections.emptyList();
         } else {
-            return MealsUtil.getFilteredWithExceeded(service.getFilteredByDate(userId, beginDate, endDate), beginTime, endTime, MealsUtil.DEFAULT_CALORIES_PER_DAY);
+            return MealsUtil.getFilteredWithExceeded(service.getFilteredByDate(userId, beginDate, endDate),
+                    beginTime, endTime, MealsUtil.DEFAULT_CALORIES_PER_DAY);
         }
     }
 
