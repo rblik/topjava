@@ -13,6 +13,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,7 +49,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
         Objects.requireNonNull(meal);
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
-                .addValue("date_time", meal.getDateTime().withNano(0))
+                .addValue("date_time", meal.getDateTime().truncatedTo(ChronoUnit.SECONDS))
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
                 .addValue("user_id", userId);
