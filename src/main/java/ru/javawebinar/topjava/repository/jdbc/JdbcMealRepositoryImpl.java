@@ -44,12 +44,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Override
     public Meal save(Meal meal, int userId) {
         Objects.requireNonNull(meal);
-        MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", meal.getId())
-                .addValue("date_time", meal.getDateTime().truncatedTo(ChronoUnit.SECONDS))
-                .addValue("description", meal.getDescription())
-                .addValue("calories", meal.getCalories())
-                .addValue("user_id", userId);
+        MapSqlParameterSource map = getParamMap(meal, userId);
         if (meal.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
@@ -81,5 +76,14 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=? AND date_time>? AND date_time<? ORDER BY date_time DESC", MEAL_MAPPER, userId, startDate, endDate);
+    }
+
+    private MapSqlParameterSource getParamMap(Meal meal, int userId) {
+        return new MapSqlParameterSource()
+                    .addValue("id", meal.getId())
+                    .addValue("date_time", meal.getDateTime().truncatedTo(ChronoUnit.SECONDS))
+                    .addValue("description", meal.getDescription())
+                    .addValue("calories", meal.getCalories())
+                    .addValue("user_id", userId);
     }
 }
