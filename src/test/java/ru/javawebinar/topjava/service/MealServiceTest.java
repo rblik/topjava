@@ -56,8 +56,12 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void testNotFoundDelete() {
-        service.delete(ADMIN_MEAL_ID, USER_ID);
         service.delete(10, USER_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundWithUserIdDelete() {
+        service.delete(ADMIN_MEAL_ID, USER_ID);
     }
 
     @Test
@@ -67,8 +71,12 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void testNotFoundGet() {
-        service.get(ADMIN_MEAL_ID, USER_ID);
         service.get(10, USER_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundWithUserIdGet() {
+        service.get(ADMIN_MEAL_ID, USER_ID);
     }
 
     @Test
@@ -88,11 +96,15 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void testNotFoundUpdate() {
-        Meal adminMeal = new Meal(ADMIN_MEAL);
         Meal userMeal = new Meal(USER_MEAL);
         userMeal.setId(10);
+        service.update(userMeal, USER_ID);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundWithUserIdUpdate() {
+        Meal adminMeal = new Meal(ADMIN_MEAL);
         adminMeal.setCalories(1500);
         service.update(adminMeal, USER_ID);
-        service.update(userMeal, USER_ID);
     }
 }
