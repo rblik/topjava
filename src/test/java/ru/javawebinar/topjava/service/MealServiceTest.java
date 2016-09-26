@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +11,7 @@ import ru.javawebinar.topjava.util.DbPopulator;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static java.time.temporal.ChronoUnit.WEEKS;
@@ -40,18 +39,20 @@ public class MealServiceTest {
 
     @Test
     public void testSave() {
-        Meal newMeal = new Meal(LocalDateTime.now(), "Ужин", 800);
-        Meal savedMeal = service.save(newMeal, USER_ID);
-        newMeal.setId(savedMeal.getId());
-        MATCHER.assertEquals(newMeal, savedMeal);
+        Meal newMeal = new Meal(LocalDateTime.now().withNano(0), "Ужин", 800);
+        newMeal.setId(service.save(newMeal, ADMIN_ID).getId());
+        MATCHER.assertCollectionEquals(Arrays.asList(newMeal, ADMIN_MEAL, ADMIN_MEAL_1), service.getAll(ADMIN_ID));
+    }
+
+    @Test
+    public void testGetAll() {
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN_MEAL, ADMIN_MEAL_1), service.getAll(ADMIN_ID));
     }
 
     @Test
     public void testDelete() {
-        service.delete(100008, ADMIN_ID);
-        Collection<Meal> initState = service.getAll(ADMIN_ID);
-        Collection<Meal> finalState = Collections.singletonList(ADMIN_MEAL);
-        MATCHER.assertCollectionEquals(finalState, initState);
+        service.delete(ADMIN_MEAL_ID_1, ADMIN_ID);
+        MATCHER.assertCollectionEquals(Collections.singletonList(ADMIN_MEAL), service.getAll(ADMIN_ID));
     }
 
     @Test(expected = NotFoundException.class)
@@ -81,8 +82,8 @@ public class MealServiceTest {
 
     @Test
     public void testGetFiltered() {
-        Assert.assertEquals(service.getBetweenDateTimes(LocalDateTime.now()
-                .minus(1, WEEKS), LocalDateTime.now(), ADMIN_ID).size(), 2);
+        MATCHER.assertCollectionEquals(Arrays.asList(ADMIN_MEAL, ADMIN_MEAL_1),
+                service.getBetweenDateTimes(LocalDateTime.now().minus(1, WEEKS), LocalDateTime.now(), ADMIN_ID));
     }
 
     @Test
