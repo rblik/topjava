@@ -22,7 +22,7 @@ import static ru.javawebinar.topjava.UserTestData.USER;
  * GKislin
  * 13.03.2015.
  */
-@ContextConfiguration({"file:src/test/resources/spring/spring-app-test.xml"})
+@ContextConfiguration({"classpath:spring/spring-app-test.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class InMemoryAdminRestControllerSpringTest {
 

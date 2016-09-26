@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
@@ -29,9 +28,6 @@ public class MealsUtil {
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(MealsUtil.class);
-
-
     public static void main(String[] args) {
         List<MealWithExceed> filteredMealsWithExceeded = getFilteredWithExceeded(MEALS, LocalTime.of(7, 0), LocalTime.of(12, 0), DEFAULT_CALORIES_PER_DAY);
         filteredMealsWithExceeded.forEach(System.out::println);
@@ -56,7 +52,7 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
-    public static final RowMapper<Meal> MEAL_MAPPER = (rs, rowNum) -> new Meal(rs.getInt("id"), TimeUtil.parseLocalDateTimeFormatted(rs.getString("date_time")), rs.getString("description"), rs.getInt("calories"));
+    public static final RowMapper<Meal> MEAL_MAPPER = new BeanPropertyRowMapper<>(Meal.class);
 
     public static List<MealWithExceed> getFilteredWithExceededByCycle(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 

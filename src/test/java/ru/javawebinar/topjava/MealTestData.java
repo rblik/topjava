@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Objects;
 
 /**
  * GKislin
@@ -19,6 +18,5 @@ public class MealTestData {
     public static final Meal ADMIN_MEAL = new Meal(ADMIN_MEAL_ID, LocalDateTime.of(2016, Month.SEPTEMBER, 25, 16, 0), "Админ обжиранч", 550);
     public static final Meal ADMIN_MEAL_1 = new Meal(ADMIN_MEAL_ID_1, LocalDateTime.of(2016, Month.SEPTEMBER, 25, 11, 0), "Админ ланч", 550);
     public static final Meal USER_MEAL = new Meal(USER_MEAL_ID, LocalDateTime.of(2016, Month.SEPTEMBER, 25, 10, 0), "Завтрак", 500);
-    public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>(
-            (expected, actual) -> expected == actual || (Objects.equals(expected.toString(), actual.toString())));
+    public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>();
 }
