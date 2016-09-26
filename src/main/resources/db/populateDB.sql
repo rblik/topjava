@@ -26,3 +26,5 @@ INSERT INTO meals (date_time, description, calories, user_id) VALUES
 -- EXPLAIN SELECT * FROM meals WHERE user_id = 100000;
 -- EXPLAIN SELECT * FROM meals WHERE id = 100002 AND user_id = 100000;
 -- EXPLAIN SELECT * FROM meals WHERE user_id=100001 AND date_time>'2016-09-25' AND date_time<'2016-09-27' ORDER BY date_time DESC
+-- EXPLAIN DELETE FROM meals WHERE id =100009 AND user_id=100001;
+-- EXPLAIN UPDATE meals SET date_time = '2016-09-25 10:00', description = 'Завтрак', calories = 800 WHERE id = 100008 AND user_id = 100002;
