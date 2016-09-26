@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,8 +25,6 @@ import static ru.javawebinar.topjava.util.MealsUtil.MEAL_MAPPER;
 
 @Repository
 public class JdbcMealRepositoryImpl implements MealRepository {
-
-    private static final BeanPropertyRowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -70,6 +67,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
         return jdbcTemplate.update("DELETE FROM meals WHERE id =? AND user_id=?", id, userId) != 0;
     }
 
+    //queryForObject throws exception instead of returning null :(
     @Override
     public Meal get(int id, int userId) {
         return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM meals WHERE id =? AND user_id =?", MEAL_MAPPER, id, userId));
