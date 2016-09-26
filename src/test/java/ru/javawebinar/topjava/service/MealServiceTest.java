@@ -50,9 +50,14 @@ public class MealServiceTest {
     public void testDelete() {
         service.delete(100008, ADMIN_ID);
         Collection<Meal> initState = service.getAll(ADMIN_ID);
-
         Collection<Meal> finalState = Collections.singletonList(ADMIN_MEAL);
         MATCHER.assertCollectionEquals(finalState, initState);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundDelete() {
+        service.delete(ADMIN_MEAL_ID, USER_ID);
+        service.delete(10, USER_ID);
     }
 
     @Test
@@ -60,20 +65,16 @@ public class MealServiceTest {
         MATCHER.assertEquals(service.get(USER_MEAL_ID, USER_ID), USER_MEAL);
     }
 
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundGet() {
+        service.get(ADMIN_MEAL_ID, USER_ID);
+        service.get(10, USER_ID);
+    }
+
     @Test
     public void testGetFiltered() {
         Assert.assertEquals(service.getBetweenDateTimes(LocalDateTime.now()
                 .minus(1, WEEKS), LocalDateTime.now(), ADMIN_ID).size(), 2);
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void testNotFoundDelete() {
-        service.delete(ADMIN_MEAL_ID, USER_ID);
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void testGetNotFound() {
-        service.delete(ADMIN_MEAL_ID, USER_ID);
     }
 
     @Test
@@ -83,5 +84,15 @@ public class MealServiceTest {
         service.update(meal, USER_ID);
         Meal mealUpdated = service.get(USER_MEAL_ID, USER_ID);
         MATCHER.assertEquals(meal, mealUpdated);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testNotFoundUpdate() {
+        Meal adminMeal = new Meal(ADMIN_MEAL);
+        Meal userMeal = new Meal(USER_MEAL);
+        userMeal.setId(10);
+        adminMeal.setCalories(1500);
+        service.update(adminMeal, USER_ID);
+        service.update(userMeal, USER_ID);
     }
 }
