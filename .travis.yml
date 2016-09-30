@@ -2,5 +2,5 @@ language: java
 jdk: oraclejdk8
 services: postgresql
 before_script:
-  - psql -c "create database topjava;" -U postgres,
-  - psql -c \"create user user with password 'password';\" -U postgres
+  ["psql -c \"create user user with password 'password';\" -U postgres",
+"psql -c \"create database topjava WITH OWNER user;\" -U postgres"]
