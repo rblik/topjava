@@ -11,6 +11,18 @@
         </encoder>
     </appender>
 
+    <appender name="fileTest" class="ch.qos.logback.core.FileAppender">
+        <file>${TOPJAVA_ROOT}/log/test.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>%date %logger{0} %30.30msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="MealTesting" level="info" additivity="false">
+        <appender-ref ref="fileTest"/>
+    </logger>
     <logger name="org.springframework.jdbc" level="debug"/>
     <logger name="ru.javawebinar.topjava" level="debug"/>
 
