@@ -22,8 +22,7 @@ import static ru.javawebinar.topjava.UserTestData.USER2;
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
-
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext();) {
+        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext()) {
             appCtx.getEnvironment().setActiveProfiles(Profiles.POSTGRES, Profiles.DATAJPA);
             ((AbstractRefreshableConfigApplicationContext)appCtx).setConfigLocations("spring/spring-app.xml","spring/spring-db.xml");
             appCtx.refresh();
