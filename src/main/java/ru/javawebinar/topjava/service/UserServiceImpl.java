@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -21,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private MealRepository mealRepository;
 
     @CacheEvict(value = "users", allEntries = true)
     @Override
@@ -57,6 +62,14 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         repository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public User getUserWithMeals(int id) {
+        User user = get(id);
+        user.setMeals(mealRepository.getAll(id));
+        return user;
     }
 
     @CacheEvict(value = "users", allEntries = true)

@@ -9,6 +9,8 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.ServiceTest;
@@ -20,8 +22,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 public abstract class AbstractMealServiceTest extends ServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);
@@ -56,7 +57,7 @@ public abstract class AbstractMealServiceTest extends ServiceTest {
     @Override
     public void testDelete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
+        MealTestData.MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
     }
 
     @Override
@@ -68,13 +69,13 @@ public abstract class AbstractMealServiceTest extends ServiceTest {
     public void testSave() throws Exception {
         Meal created = getCreated();
         service.save(created, USER_ID);
-        MATCHER.assertCollectionEquals(Arrays.asList(created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), service.getAll(USER_ID));
+        MealTestData.MATCHER.assertCollectionEquals(Arrays.asList(created, MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1), service.getAll(USER_ID));
     }
 
     @Override
     public void testGet() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
-        MATCHER.assertEquals(ADMIN_MEAL1, actual);
+        MealTestData.MATCHER.assertEquals(ADMIN_MEAL1, actual);
     }
 
     @Override
@@ -86,7 +87,7 @@ public abstract class AbstractMealServiceTest extends ServiceTest {
     public void testUpdate() throws Exception {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
-        MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
+        MealTestData.MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
     }
 
     @Test
@@ -99,12 +100,20 @@ public abstract class AbstractMealServiceTest extends ServiceTest {
 
     @Override
     public void testGetAll() throws Exception {
-        MATCHER.assertCollectionEquals(MEALS, service.getAll(USER_ID));
+        MealTestData.MATCHER.assertCollectionEquals(MEALS, service.getAll(USER_ID));
     }
 
     @Test
     public void testGetBetween() throws Exception {
-        MATCHER.assertCollectionEquals(Arrays.asList(MEAL3, MEAL2, MEAL1),
+        MealTestData.MATCHER.assertCollectionEquals(Arrays.asList(MEAL3, MEAL2, MEAL1),
                 service.getBetweenDates(LocalDate.of(2015, Month.MAY, 30), LocalDate.of(2015, Month.MAY, 30), USER_ID));
+    }
+
+    @Test
+    public void testGetWithUser() {
+        service.save(ADMIN_MEAL2, ADMIN_ID);
+        Meal withUser = service.getWithUser(ADMIN_MEAL_ID + 1, ADMIN_ID);
+        MealTestData.MATCHER.assertEquals(ADMIN_MEAL2, withUser);
+        UserTestData.MATCHER.assertEquals(ADMIN, withUser.getUser());
     }
 }
