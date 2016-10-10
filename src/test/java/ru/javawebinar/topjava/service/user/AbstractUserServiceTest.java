@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.service;
+package ru.javawebinar.topjava.service.user;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.service.ServiceTest;
+import ru.javawebinar.topjava.service.UserService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +15,7 @@ import java.util.Collections;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
-public abstract class UserServiceTest extends ServiceTest{
+public abstract class AbstractUserServiceTest extends ServiceTest {
 
     @Autowired
     protected UserService service;

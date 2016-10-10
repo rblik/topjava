@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.service;
+package ru.javawebinar.topjava.service.meal;
 
 import org.junit.AfterClass;
 import org.junit.Rule;
@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.service.ServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -21,8 +23,8 @@ import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
-public abstract class MealServiceTest extends ServiceTest{
-    private static final Logger LOG = LoggerFactory.getLogger(MealServiceTest.class);
+public abstract class AbstractMealServiceTest extends ServiceTest {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
