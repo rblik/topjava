@@ -34,19 +34,7 @@ public class JdbcHSQLDBMealRepositoryImpl extends AbstractJdbcMealRepositoryImpl
                 .addValue("date_time", Date.from(meal.getDateTime().atZone(ZoneId.systemDefault()).toInstant()))
                 .addValue("user_id", userId);
 
-        if (meal.isNew()) {
-            Number newId = insertMeal.executeAndReturnKey(map);
-            meal.setId(newId.intValue());
-        } else {
-            if (namedParameterJdbcTemplate.update("" +
-                            "UPDATE meals " +
-                            "   SET description=:description, calories=:calories, date_time=:date_time " +
-                            " WHERE id=:id AND user_id=:user_id"
-                    , map) == 0) {
-                return null;
-            }
-        }
-        return meal;
+        return execute(meal, map);
     }
 
     @Override

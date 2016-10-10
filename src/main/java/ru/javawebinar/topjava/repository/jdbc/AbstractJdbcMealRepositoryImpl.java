@@ -5,6 +5,7 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ru.javawebinar.topjava.model.Meal;
@@ -55,4 +56,20 @@ public abstract class AbstractJdbcMealRepositoryImpl implements MealRepository{
 
     @Override
     public abstract List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
+
+    Meal execute(Meal meal, MapSqlParameterSource map) {
+        if (meal.isNew()) {
+            Number newId = insertMeal.executeAndReturnKey(map);
+            meal.setId(newId.intValue());
+        } else {
+            if (namedParameterJdbcTemplate.update("" +
+                            "UPDATE meals " +
+                            "   SET description=:description, calories=:calories, date_time=:date_time " +
+                            " WHERE id=:id AND user_id=:user_id"
+                    , map) == 0) {
+                return null;
+            }
+        }
+        return meal;
+    }
 }
