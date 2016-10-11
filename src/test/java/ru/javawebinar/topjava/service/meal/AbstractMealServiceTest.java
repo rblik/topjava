@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.MealTestData;
-import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.ServiceTest;
@@ -22,7 +21,8 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 public abstract class AbstractMealServiceTest extends ServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);
@@ -111,9 +111,5 @@ public abstract class AbstractMealServiceTest extends ServiceTest {
 
     @Test
     public void testGetWithUser() {
-        service.save(ADMIN_MEAL2, ADMIN_ID);
-        Meal withUser = service.getWithUser(ADMIN_MEAL_ID + 1, ADMIN_ID);
-        MealTestData.MATCHER.assertEquals(ADMIN_MEAL2, withUser);
-        UserTestData.MATCHER.assertEquals(ADMIN, withUser.getUser());
     }
 }

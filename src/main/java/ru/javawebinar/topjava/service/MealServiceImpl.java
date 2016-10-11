@@ -2,10 +2,8 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
@@ -61,12 +59,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Meal getWithUser(int id, int userId) {
-        Meal meal = get(id, userId);
-        User user = userRepository.get(userId);
-        System.out.println(user);
-        meal.setUser(user);
-        return meal;
+        return repository.getWithUser(id, userId);
     }
 }

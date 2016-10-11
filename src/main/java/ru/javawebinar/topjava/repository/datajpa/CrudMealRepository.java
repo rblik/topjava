@@ -30,4 +30,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 //    @Query("DELETE FROM Meal m WHERE m.id=?1 AND m.user.id=?2")
     @Query(name = Meal.DELETE)
     Integer deleteMeal(@Param("id") Integer id, @Param("userId") Integer userId);
+
+    @Query("select m from Meal m join fetch m.user where m.id=?1 and m.user.id=?2")
+    Meal getWithUser(int id, int userId);
 }

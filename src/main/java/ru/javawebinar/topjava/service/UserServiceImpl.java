@@ -66,10 +66,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getUserWithMeals(int id) {
-        User user = get(id);
-        user.setMeals(mealRepository.getAll(id));
-        return user;
+    public User getWithMeal(int id) {
+        return repository.getWithMeal(id);
     }
 
     @CacheEvict(value = "users", allEntries = true)
