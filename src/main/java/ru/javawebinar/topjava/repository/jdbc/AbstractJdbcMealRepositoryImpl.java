@@ -42,7 +42,19 @@ public abstract class AbstractJdbcMealRepositoryImpl implements MealRepository{
                 .addValue("date_time", getDate(meal.getDateTime()))
                 .addValue("user_id", userId);
 
-        return execute(meal, map);
+        if (meal.isNew()) {
+            Number newId = insertMeal.executeAndReturnKey(map);
+            meal.setId(newId.intValue());
+        } else {
+            if (namedParameterJdbcTemplate.update("" +
+                            "UPDATE meals " +
+                            "   SET description=:description, calories=:calories, date_time=:date_time " +
+                            " WHERE id=:id AND user_id=:user_id"
+                    , map) == 0) {
+                return null;
+            }
+        }
+        return meal;
     }
 
     @Override
@@ -71,20 +83,4 @@ public abstract class AbstractJdbcMealRepositoryImpl implements MealRepository{
     }
 
     public abstract Object getDate(LocalDateTime dateTime);
-
-    protected Meal execute(Meal meal, MapSqlParameterSource map) {
-        if (meal.isNew()) {
-            Number newId = insertMeal.executeAndReturnKey(map);
-            meal.setId(newId.intValue());
-        } else {
-            if (namedParameterJdbcTemplate.update("" +
-                            "UPDATE meals " +
-                            "   SET description=:description, calories=:calories, date_time=:date_time " +
-                            " WHERE id=:id AND user_id=:user_id"
-                    , map) == 0) {
-                return null;
-            }
-        }
-        return meal;
-    }
 }
