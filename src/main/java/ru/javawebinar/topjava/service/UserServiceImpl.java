@@ -24,9 +24,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private MealRepository mealRepository;
-
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User save(User user) {
