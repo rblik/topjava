@@ -57,7 +57,7 @@ public abstract class AbstractJdbcMealRepositoryImpl implements MealRepository{
     @Override
     public abstract List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 
-    Meal execute(Meal meal, MapSqlParameterSource map) {
+    protected Meal execute(Meal meal, MapSqlParameterSource map) {
         if (meal.isNew()) {
             Number newId = insertMeal.executeAndReturnKey(map);
             meal.setId(newId.intValue());
