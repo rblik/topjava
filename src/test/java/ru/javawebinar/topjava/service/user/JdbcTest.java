@@ -6,14 +6,13 @@ import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static ru.javawebinar.topjava.UserTestData.MATCHER;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles({Profiles.POSTGRES, Profiles.JDBC})
 public class JdbcTest extends AbstractUserServiceTest {
@@ -24,13 +23,12 @@ public class JdbcTest extends AbstractUserServiceTest {
     @Override
     @Test
     public void testGetUserWithMeal() throws Exception {
-        User user = new User(null, "New", "new@gmail.com", "newPass", 1555, false, Collections.singleton(Role.ROLE_USER));
-        Meal meal = new Meal(LocalDateTime.now(), "Hvchik", 500);
-        meal.setUser(user);
-        service.save(user);
-        mealService.save(meal, 100010);
-        User userWithMeals = service.getUserWithMeals(100010);
-        MATCHER.assertEquals(user, userWithMeals);
+        Meal meal = new Meal(LocalDateTime.now(), "Havchik", 500);
+        meal.setUser(USER2);
+        service.save(USER2);
+        mealService.save(meal, USER2_ID);
+        User userWithMeals = service.getUserWithMeals(USER2_ID);
+        MATCHER.assertEquals(USER2, userWithMeals);
         MealTestData.MATCHER.assertCollectionEquals(Collections.singletonList(meal), userWithMeals.getMeals());
     }
 }

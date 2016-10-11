@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.Profiles;
@@ -15,10 +13,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-@Repository
 @Profile(Profiles.HSQLDB)
+@Repository
 public class JdbcHSQLDBMealRepositoryImpl extends AbstractJdbcMealRepositoryImpl{
-    private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
     @Autowired
     public JdbcHSQLDBMealRepositoryImpl(DataSource dataSource) {
