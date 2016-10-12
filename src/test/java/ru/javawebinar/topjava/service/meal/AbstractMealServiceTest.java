@@ -108,8 +108,4 @@ public abstract class AbstractMealServiceTest extends ServiceTest {
         MealTestData.MATCHER.assertCollectionEquals(Arrays.asList(MEAL3, MEAL2, MEAL1),
                 service.getBetweenDates(LocalDate.of(2015, Month.MAY, 30), LocalDate.of(2015, Month.MAY, 30), USER_ID));
     }
-
-    @Test
-    public void testGetWithUser() {
-    }
 }

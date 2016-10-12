@@ -13,7 +13,7 @@ import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 
 @ActiveProfiles({Profiles.POSTGRES, Profiles.DATAJPA})
 public class DataJpaTest extends AbstractMealServiceTest {
-    @Override
+
     public void testGetWithUser() {
         service.save(ADMIN_MEAL2, ADMIN_ID);
         Meal withUser = service.getWithUser(ADMIN_MEAL_ID + 1, ADMIN_ID);
