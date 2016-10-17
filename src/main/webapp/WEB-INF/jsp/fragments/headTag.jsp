@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <head>
-    <%--Didn't quite understood this. so decided to put ${pageContext.request.contextPath} on every reference.
+    <%--Didn't understand; put ${pageContext.request.contextPath} on every reference.
     Hope you'll explain--%>
     <%--<c:set var="url">${pageContext.request.requestURL}</c:set>--%>
     <%--<base href="${fn:substring(url, 0, fn:length(url) - fn:length(pageContext.request.requestURI))}${pageContext.request.contextPath}/" />--%>

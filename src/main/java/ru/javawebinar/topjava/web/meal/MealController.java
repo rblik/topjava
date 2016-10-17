@@ -59,9 +59,7 @@ public class MealController {
     @RequestMapping(method = RequestMethod.GET, params = "action=create")
     public String createMealBinding(Model model) {
         // changed ChronoUnit from SECONDS to MINUTES -
-        // didn't go well with diference between new meals and already existing meals
-        // when I specify seconds in validation @DateTimeFormat it goes well with creation
-        // when I don't - with updating (alreay existing meals without seconds)
+        // didn't go well with difference between new meals with seconds and already existing meals
         // so I decided to make it all the same :D
         model.addAttribute("meal", new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
         return "meal";
