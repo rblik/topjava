@@ -39,15 +39,11 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     private SimpleJdbcInsert insertUser;
 
-    private SimpleJdbcInsert insertRole;
-
     @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.insertUser = new SimpleJdbcInsert(dataSource)
                 .withTableName("USERS")
                 .usingGeneratedKeyColumns("id");
-        this.insertRole = new SimpleJdbcInsert(dataSource)
-                .withTableName("USER_ROLES");
     }
 
     @Override
@@ -65,31 +61,13 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(map);
             user.setId(newKey.intValue());
-            user.getRoles().forEach(role -> {
-                MapSqlParameterSource rolesMap = new MapSqlParameterSource()
-                        .addValue("userId", newKey)
-                        .addValue("role", role);
-                insertRole.execute(rolesMap);
-            });
+            rolesBatchUpdate(user);
         } else {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map);
             jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
-            jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", new BatchPreparedStatementSetter() {
-                List<String> roles = user.getRoles().stream().map(Enum::toString).collect(Collectors.toList());
-
-                @Override
-                public void setValues(PreparedStatement ps, int i) throws SQLException {
-                    ps.setInt(1, user.getId());
-                    ps.setString(2, roles.get(i));
-                }
-
-                @Override
-                public int getBatchSize() {
-                    return roles.size();
-                }
-            });
+            rolesBatchUpdate(user);
         }
         return user;
     }
@@ -97,21 +75,20 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public boolean delete(int id) {
-        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", id);
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
     @Override
     public User get(int id) {
         User user = DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id));
-        if (user != null) setRoles(user);
+        setRoles(user);
         return user;
     }
 
     @Override
     public User getByEmail(String email) {
         User user = DataAccessUtils.singleResult(jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email));
-        if (user != null) setRoles(user);
+        setRoles(user);
         return user;
     }
 
@@ -122,8 +99,25 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         return users;
     }
 
+    private int[] rolesBatchUpdate(final User user) {
+        return jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)",  new BatchPreparedStatementSetter() {
+            List<Role> roles = user.getRoles().stream().collect(Collectors.toList());
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, user.getId());
+                ps.setString(2, roles.get(i).name());
+            }
+            @Override
+            public int getBatchSize() {
+                return roles.size();
+            }
+        });
+    }
+
     private void setRoles(User user) {
-        List<String> list = namedParameterJdbcTemplate.queryForList("SELECT role FROM user_roles WHERE user_id=:userId", new MapSqlParameterSource("userId", user.getId()), String.class);
-        user.setRoles(list.stream().map(Role::valueOf).collect(Collectors.toSet()));
+        if (user != null) {
+            List<String> list = namedParameterJdbcTemplate.queryForList("SELECT role FROM user_roles WHERE user_id=:userId", new MapSqlParameterSource("userId", user.getId()), String.class);
+            user.setRoles(list.stream().map(Role::valueOf).collect(Collectors.toSet()));
+        }
     }
 }
