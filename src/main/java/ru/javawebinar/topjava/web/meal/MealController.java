@@ -18,7 +18,9 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,22 +43,22 @@ public class MealController {
         return "meals";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "action=delete")
-    public String delete(@RequestParam("id") Integer id) {
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public String delete(@RequestParam("id") Integer id, HttpServletResponse response) throws IOException {
         int userId = AuthorizedUser.id();
         LOG.info("delete meal {} for User {}", id, userId);
         service.delete(id, userId);
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "action=update")
+    @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String updateMealBinding(@RequestParam("id") Integer id, Model model) {
         int userId = AuthorizedUser.id();
         model.addAttribute("meal", service.get(id, userId));
         return "meal";
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "action=create")
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createMealBinding(Model model) {
         // changed ChronoUnit from SECONDS to MINUTES -
         // didn't go well with difference between new meals with seconds and already existing meals
@@ -86,21 +88,21 @@ public class MealController {
         return mv;
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = {"id!="})
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute("meal") @Valid Meal meal) {
         int userId = AuthorizedUser.id();
         LOG.info("update {} for User {}", meal, userId);
         service.update(meal, userId);
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = "id=")
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@ModelAttribute("meal") @Valid Meal meal) {
         meal.setId(null);
         int userId = AuthorizedUser.id();
         LOG.info("create {} for User {}", meal, userId);
         service.save(meal, userId);
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
 
