@@ -9,10 +9,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: gkislin
@@ -54,7 +51,7 @@ public class User extends NamedEntity {
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "calories_per_day", columnDefinition = "default 2000")
     @Digits(fraction = 0, integer = 4)
@@ -122,6 +119,14 @@ public class User extends NamedEntity {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
     }
 
     public Set<Role> getRoles() {

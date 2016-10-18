@@ -11,8 +11,6 @@
             <property name="repository" ref="mockUserRepository"/>
         </bean>
     -->
-    <bean class="ru.javawebinar.topjava.web.user.AdminRestController"/>
-    <bean class="ru.javawebinar.topjava.web.meal.MealRestController"/>
 
     <import resource="spring-tools.xml"/>
 
