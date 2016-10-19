@@ -67,13 +67,13 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(map);
             user.setId(newKey.intValue());
-            rolesBatchUpdate(user);
+            rolesBatchInsert(user);
         } else {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map);
             jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
-            rolesBatchUpdate(user);
+            rolesBatchInsert(user);
         }
         return user;
     }
@@ -115,9 +115,9 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                     user.setRegistered(rs.getDate("registered"));
                     user.setEnabled(rs.getBoolean("enabled"));
                     user.setCaloriesPerDay(rs.getInt("calories_per_day"));
-                    map.merge(user.getId(), user, (user1, user2) -> {
-                        user1.addRole(role);
-                        return user1;
+                    map.merge(user.getId(), user, (oldUser, newUser) -> {
+                        oldUser.addRole(role);
+                        return oldUser;
                     });
                 }
                 return new ArrayList<>(map.values().stream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).collect(Collectors.toList()));
@@ -125,16 +125,15 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         });
     }
 
-    private int[] rolesBatchUpdate(final User user) {
+    @Transactional
+    private int[] rolesBatchInsert(final User user) {
         return jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", new BatchPreparedStatementSetter() {
-            List<Role> roles = user.getRoles().stream().collect(Collectors.toList());
-
+            List<Role> roles = new ArrayList<>(user.getRoles());
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setInt(1, user.getId());
                 ps.setString(2, roles.get(i).name());
             }
-
             @Override
             public int getBatchSize() {
                 return roles.size();
