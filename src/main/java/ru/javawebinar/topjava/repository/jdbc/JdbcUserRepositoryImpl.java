@@ -21,9 +21,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -100,8 +100,8 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return jdbcTemplate.query("SELECT * FROM users u LEFT OUTER JOIN user_roles ON u.id = user_roles.user_id ORDER BY u.name, u.email", new ResultSetExtractor<List<User>>() {
-            private final Map<Integer, User> map = new TreeMap<>();
+        return jdbcTemplate.query("SELECT * FROM users u LEFT OUTER JOIN user_roles ON u.id = user_roles.user_id", new ResultSetExtractor<List<User>>() {
+            private final Map<Integer, User> map = new HashMap<>();
             @Override
             public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 while (rs.next()) {
@@ -125,7 +125,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         });
     }
 
-    @Transactional
     private int[] rolesBatchInsert(final User user) {
         return jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", new BatchPreparedStatementSetter() {
             List<Role> roles = new ArrayList<>(user.getRoles());
