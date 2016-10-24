@@ -7,16 +7,16 @@
 
     <bean class="ru.javawebinar.topjava.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    <!--<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="formatters">
             <set>
                 <bean class="ru.javawebinar.topjava.web.json.CustomFormatters.DateFormatter"/>
                 <bean class="ru.javawebinar.topjava.web.json.CustomFormatters.TimeFormatter"/>
             </set>
         </property>
-    </bean>
+    </bean>-->
 
-    <mvc:annotation-driven conversion-service="conversionService">
+    <mvc:annotation-driven> <!--conversion-service="conversionService"-->
         <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper" ref="objectMapper"/>

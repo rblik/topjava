@@ -1,19 +1,29 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-@ControllerAdvice
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static ru.javawebinar.topjava.web.json.CustomFormatters.DateFormatter;
+import static ru.javawebinar.topjava.web.json.CustomFormatters.TimeFormatter;
+
+@ControllerAdvice(assignableTypes = {MealRestController.class})
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {NotFoundException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), NOT_FOUND, request);
     }
 
+    @InitBinder
+    public void asd(WebDataBinder binder) {
+        binder.addCustomFormatter(new DateFormatter());
+        binder.addCustomFormatter(new TimeFormatter());
+    }
 }
