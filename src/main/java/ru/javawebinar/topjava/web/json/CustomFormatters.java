@@ -8,7 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class CustomDateTimeFormatter {
+public class CustomFormatters {
 
     public static class DateFormatter implements Formatter<LocalDate>{
         private String pattern = "yyyy-MM-dd";

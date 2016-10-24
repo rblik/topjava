@@ -10,8 +10,8 @@
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="formatters">
             <set>
-                <bean class="ru.javawebinar.topjava.web.json.CustomDateTimeFormatter.DateFormatter"/>
-                <bean class="ru.javawebinar.topjava.web.json.CustomDateTimeFormatter.TimeFormatter"/>
+                <bean class="ru.javawebinar.topjava.web.json.CustomFormatters.DateFormatter"/>
+                <bean class="ru.javawebinar.topjava.web.json.CustomFormatters.TimeFormatter"/>
             </set>
         </property>
     </bean>
