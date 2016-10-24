@@ -56,11 +56,9 @@ public class MealRestController extends AbstractMealController {
         return ResponseEntity.created(createdMealUri).body(created);
     }
 
-    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Meal> updateWithLocation(@RequestBody Meal meal, @PathVariable("id") int id) {
         Meal updated = super.update(meal, id);
-        URI createdMealUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "{id}").buildAndExpand(updated.getId()).toUri();
         return ResponseEntity.ok(updated);
     }
 }
