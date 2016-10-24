@@ -16,11 +16,13 @@ import static ru.javawebinar.topjava.web.json.CustomFormatters.TimeFormatter;
 
 @ControllerAdvice(assignableTypes = {MealRestController.class})
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(value = {NotFoundException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), NOT_FOUND, request);
     }
 
+//    The same as in spring-mvc.xml:10
     @InitBinder
     public void asd(WebDataBinder binder) {
         binder.addCustomFormatter(new DateFormatter());
