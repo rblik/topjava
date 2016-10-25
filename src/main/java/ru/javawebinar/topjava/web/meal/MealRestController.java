@@ -60,7 +60,7 @@ public class MealRestController extends AbstractMealController {
     }
 
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Meal> updateWithLocation(@RequestBody Meal meal, @PathVariable("id") int id) {
+    public ResponseEntity<Meal> updateWithEntity(@RequestBody Meal meal, @PathVariable("id") int id) {
         Meal updated = super.update(meal, id);
         return ResponseEntity.ok(updated);
     }
