@@ -32,7 +32,7 @@ public class MealRestController extends AbstractMealController {
 
     @Override
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public Meal get(@PathVariable("id") int id) {
+    public Meal get(@PathVariable int id) {
         return super.get(id);
     }
 
@@ -44,10 +44,10 @@ public class MealRestController extends AbstractMealController {
 
     @Override
     @GetMapping(value = "/between", produces = APPLICATION_JSON_VALUE)
-    public List<MealWithExceed> getBetween(@RequestParam(value = "startDate", required = false) LocalDate startDate,
-                                           @RequestParam(value = "startTime", required = false) LocalTime startTime,
-                                           @RequestParam(value = "endDate", required = false) LocalDate endDate,
-                                           @RequestParam(value = "endTime", required = false) LocalTime endTime){
+    public List<MealWithExceed> getBetween(@RequestParam(required = false) LocalDate startDate,
+                                           @RequestParam(required = false) LocalTime startTime,
+                                           @RequestParam(required = false) LocalDate endDate,
+                                           @RequestParam(required = false) LocalTime endTime){
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
@@ -59,8 +59,10 @@ public class MealRestController extends AbstractMealController {
         return ResponseEntity.created(createdMealUri).body(created);
     }
 
+//    return updated entity
+//    http://stackoverflow.com/a/798174/6247832
     @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Meal> updateWithEntity(@RequestBody Meal meal, @PathVariable("id") int id) {
+    public ResponseEntity<Meal> updateWithEntity(@RequestBody Meal meal, @PathVariable int id) {
         Meal updated = super.update(meal, id);
         return ResponseEntity.ok(updated);
     }
