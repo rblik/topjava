@@ -24,7 +24,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 //    The same as in spring-mvc.xml:10
     @InitBinder
-    public void asd(WebDataBinder binder) {
+    public void binder(WebDataBinder binder) {
         binder.addCustomFormatter(new DateFormatter());
         binder.addCustomFormatter(new TimeFormatter());
     }

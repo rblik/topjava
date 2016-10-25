@@ -52,9 +52,11 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testDeleteNotFound() throws Exception {
-        mockMvc.perform(delete(REST_URL + ADMIN_MEAL_ID))
+        String body = mockMvc.perform(delete(REST_URL + ADMIN_MEAL_ID))
                 .andExpect(status().isNotFound())
-                .andDo(print());
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        assertEquals("Not found entity with id=" + ADMIN_MEAL_ID, JsonUtil.readValue(body, String.class));
     }
 
     @Test
