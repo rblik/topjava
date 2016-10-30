@@ -2,7 +2,7 @@ var f;
 
 function makeEditable() {
     $('.delete').click(function () {
-        deleteRow($(this).attr("id"));
+        deleteRow($(this).closest('tr').attr('id'));
     });
 
     $('#detailsForm').submit(function () {
@@ -50,11 +50,10 @@ function deleteRow(id) {
 }
 
 function updateTable() {
-    var form = $('#filter');
+    var form = $('#filter').val();
     if (form != undefined) {
         f();
     } else {
-        var s = form.serialize();
         $.get(ajaxUrl, function (data) {
             datatableApi.fnClearTable();
             $.each(data, function (key, item) {
