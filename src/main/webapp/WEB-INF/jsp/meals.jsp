@@ -143,6 +143,10 @@
         datatableApi = $('#datatable').DataTable({
             "paging": false,
             "info": false,
+            "createdRow": function ( row, data, dataIndex ) {
+                $(row).addClass(data.exceed? "exceeded" : "normal");
+                $(row).attr('id', data.id);
+            },
             "columns": [
                 {
                     "data": "dateTime"
@@ -154,12 +158,16 @@
                     "data": "calories"
                 },
                 {
-                    "defaultContent": "Edit",
+                    "defaultContent": '<td><a class="btn btn-warning btn-xs edit"><fmt:message
+                                        key="common.update"/></a></td>',
                     "orderable": false
                 },
                 {
-                    "defaultContent": "Delete",
-                    "orderable": false
+                    "orderable": false,
+                    "render":function () {
+                        return '<td><button class="btn btn-danger btn-xs delete"><fmt:message
+                                        key="common.delete"/></button></td>'
+                    }
                 }
             ],
             "order": [

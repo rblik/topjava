@@ -22,6 +22,9 @@ function makeEditable() {
                     datatableApi.row.add(item);
                 });
                 datatableApi.draw();
+                $('.delete').click(function () {
+                    deleteRow($(this).closest('tr').attr('id'));
+                });
             }
         });
         return false;
