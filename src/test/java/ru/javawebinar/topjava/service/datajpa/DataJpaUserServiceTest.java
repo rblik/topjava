@@ -23,4 +23,9 @@ public class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
     public void testGetWithMealsNotFound() throws Exception {
         service.getWithMeals(1);
     }
+
+    @Test
+    public void testSetEnabledEquals() {
+        service.toggleEnabled(100000);
+    }
 }

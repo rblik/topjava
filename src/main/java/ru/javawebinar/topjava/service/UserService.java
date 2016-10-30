@@ -27,4 +27,8 @@ public interface UserService {
     void evictCache();
 
     User getWithMeals(int id);
+
+    default int toggleEnabled(Integer id) {
+        return 0;
+    }
 }

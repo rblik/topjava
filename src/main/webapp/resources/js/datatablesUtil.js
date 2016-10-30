@@ -28,6 +28,20 @@ function makeEditable() {
     };
     $('#filter').submit(f);
 
+    $('.box').change(function () {
+        var id = $(this).closest('tr').attr('id');
+        var parent = this;
+        $.get(ajaxUrl + "toggle/" + id, function (data) {
+            if ($(parent).is(':checked')) {
+                $(parent).closest('tr').fadeTo(300, 1);
+                successNoty("User enabled");
+            } else {
+                $(parent).closest('tr').fadeTo(300, 0.3);
+                successNoty("User disabled");
+            }
+        });
+    });
+
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });

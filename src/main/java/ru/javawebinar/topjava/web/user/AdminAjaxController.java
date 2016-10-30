@@ -37,4 +37,10 @@ public class AdminAjaxController extends AbstractUserController {
             super.update(user, id);
         }
     }
+
+    @Override
+    @GetMapping("/toggle/{id}")
+    public int toggleEnabled(@PathVariable Integer id) {
+        return super.toggleEnabled(id);
+    }
 }

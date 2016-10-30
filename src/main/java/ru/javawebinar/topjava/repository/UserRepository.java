@@ -25,4 +25,8 @@ public interface UserRepository {
     default User getWithMeals(int id){
         throw new UnsupportedOperationException();
     }
+
+    default int toggleEnabled(Integer id) {
+        return 0;
+    }
 }
