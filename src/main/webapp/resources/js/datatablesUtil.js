@@ -17,11 +17,11 @@ function makeEditable() {
             url: ajaxUrl + "filter",
             data: form.serialize(),
             success: function (data) {
-                datatableApi.fnClearTable();
+                datatableApi.clear();
                 $.each(data, function (key, item) {
-                    datatableApi.fnAddData(item);
+                    datatableApi.row.add(item);
                 });
-                datatableApi.fnDraw();
+                datatableApi.draw();
             }
         });
         return false;
@@ -55,11 +55,11 @@ function updateTable() {
         f();
     } else {
         $.get(ajaxUrl, function (data) {
-            datatableApi.fnClearTable();
+            datatableApi.clear();
             $.each(data, function (key, item) {
-                datatableApi.fnAddData(item);
+                datatableApi.row.add(item);
             });
-            datatableApi.fnDraw();
+            datatableApi.draw();
         });
     }
 }
