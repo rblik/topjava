@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.AbstractJpaUserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import static org.junit.Assert.assertNotEquals;
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -26,6 +27,9 @@ public class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
 
     @Test
     public void testSetEnabledEquals() {
+        boolean before = service.get(100000).isEnabled();
         service.toggleEnabled(100000);
+        boolean after = service.get(100000).isEnabled();
+        assertNotEquals(before, after);
     }
 }

@@ -1,4 +1,4 @@
-var f;
+var filter;
 
 function makeEditable() {
     $('.delete').click(function () {
@@ -10,7 +10,7 @@ function makeEditable() {
         return false;
     });
 
-    f = function () {
+    filter = function () {
         var form = $('#filter');
         $.ajax({
             type: "GET",
@@ -26,7 +26,7 @@ function makeEditable() {
         });
         return false;
     };
-    $('#filter').submit(f);
+    $('#filter').submit(filter);
 
     $('.box').change(function () {
         var id = $(this).closest('tr').attr('id');
@@ -66,7 +66,7 @@ function deleteRow(id) {
 function updateTable() {
     var form = $('#filter').val();
     if (form != undefined) {
-        f();
+        filter();
     } else {
         $.get(ajaxUrl, function (data) {
             datatableApi.clear();
