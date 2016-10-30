@@ -13,7 +13,7 @@
         <div class="shadow">
             <section>
                 <h3><fmt:message key="meals.title"/></h3>
-                <form method="post" class="form-horizontal" action="meals/filter">
+                <form method="get" class="form-horizontal" id="filter">
                     <div class="form-group col-xs-12">
                         <label for="startDate" class="control-label col-xs-2"><fmt:message
                                 key="meals.startDate"/>:</label>
@@ -32,12 +32,12 @@
                         <label for="endDate" class="control-label col-xs-2"><fmt:message
                                 key="meals.startTime"/>:</label>
                         <div class="col-xs-2">
-                            <input type="date" name="endDate" class="form-control" id="startTime"
+                            <input type="time" name="startTime" class="form-control" id="startTime"
                                    value="${param.startTime}">
                         </div>
                         <label for="endDate" class="control-label col-xs-2"><fmt:message key="meals.endTime"/>:</label>
                         <div class="col-xs-2">
-                            <input type="date" name="endDate" class="form-control" id="endTime"
+                            <input type="time" name="endTime" class="form-control" id="endTime"
                                    value="${param.endTime}">
                         </div>
                     </div>
