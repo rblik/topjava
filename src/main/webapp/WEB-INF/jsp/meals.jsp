@@ -110,7 +110,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description" class="control-label col-xs-4"><fmt:message
+                        <label for="calories" class="control-label col-xs-4"><fmt:message
                                 key="meals.calories"/></label>
                         <div class="col-xs-6">
                             <input type="number" name="calories" class="form-control" placeholder="Calories"
