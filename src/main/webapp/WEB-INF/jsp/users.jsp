@@ -22,7 +22,7 @@
                     <tr>
                         <th><fmt:message key="users.name"/></th>
                         <th><fmt:message key="users.email"/></th>
-                        <th><fmt:message key="users.roles"/></th>
+                            <th><fmt:message key="users.roles"/></th>
                         <th><fmt:message key="users.active"/></th>
                         <th><fmt:message key="users.registered"/></th>
                         <th></th>
