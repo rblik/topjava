@@ -7,7 +7,8 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.AbstractJpaUserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -26,10 +27,13 @@ public class DataJpaUserServiceTest extends AbstractJpaUserServiceTest {
     }
 
     @Test
-    public void testSetEnabledEquals() {
-        boolean before = service.get(100000).isEnabled();
-        service.toggleEnabled(100000);
-        boolean after = service.get(100000).isEnabled();
-        assertNotEquals(before, after);
+    public void testEnableDisable() {
+        assertTrue(service.get(USER_ID).isEnabled());
+        service.toggleEnabled(false, USER_ID);
+        assertFalse(service.get(USER_ID).isEnabled());
+        service.toggleEnabled(true, USER_ID);
+        assertTrue(service.get(USER_ID).isEnabled());
+        service.toggleEnabled(true, USER_ID);
+        assertTrue(service.get(USER_ID).isEnabled());
     }
 }

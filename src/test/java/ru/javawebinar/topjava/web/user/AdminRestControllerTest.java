@@ -12,6 +12,8 @@ import ru.javawebinar.topjava.web.json.JsonUtil;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -81,5 +83,14 @@ public class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MATCHER.contentListMatcher(ADMIN, USER)));
+    }
+
+    @Test
+    public void testToggleEnabled() throws Exception {
+        mockMvc.perform(get("/ajax/admin/users/toggle/100000").param("enabled", "false")).andExpect(status().isOk());
+        assertFalse(userService.get(100000).isEnabled());
+        mockMvc.perform(get("/ajax/admin/users/toggle/100000").param("enabled", "true")).andExpect(status().isOk());
+        assertTrue(userService.get(100000).isEnabled());
+
     }
 }

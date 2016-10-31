@@ -49,7 +49,7 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public int toggleEnabled(Integer id) {
-        return crudRepository.toggleEnabled(id);
+    public int toggleEnabled(boolean enable, Integer id) {
+        return crudRepository.toggleEnabled(enable, id);
     }
 }

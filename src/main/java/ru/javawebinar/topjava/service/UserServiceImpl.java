@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int toggleEnabled(Integer id) {
-        return repository.toggleEnabled(id);
+    public void toggleEnabled(boolean enable, Integer id) {
+        repository.toggleEnabled(enable, id);
     }
 }

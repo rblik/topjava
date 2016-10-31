@@ -28,7 +28,6 @@ public interface UserService {
 
     User getWithMeals(int id);
 
-    default int toggleEnabled(Integer id) {
-        return 0;
+    default void toggleEnabled(boolean enable, Integer id) {
     }
 }

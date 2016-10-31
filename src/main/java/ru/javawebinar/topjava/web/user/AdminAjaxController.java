@@ -40,7 +40,7 @@ public class AdminAjaxController extends AbstractUserController {
 
     @Override
     @GetMapping("/toggle/{id}")
-    public int toggleEnabled(@PathVariable Integer id) {
-        return super.toggleEnabled(id);
+    public void toggleEnabled(@RequestParam("enabled") boolean enabled, @PathVariable Integer id) {
+        super.toggleEnabled(enabled, id);
     }
 }

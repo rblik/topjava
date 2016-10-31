@@ -1,5 +1,3 @@
-var filter;
-
 function makeEditable() {
     $('.delete').click(function () {
         deleteRow($(this).closest('tr').attr('id'));
@@ -10,44 +8,51 @@ function makeEditable() {
         return false;
     });
 
-    filter = function () {
-        var form = $('#filter');
-        $.ajax({
-            type: "GET",
-            url: ajaxUrl + "filter",
-            data: form.serialize(),
-            success: function (data) {
-                datatableApi.clear();
-                $.each(data, function (key, item) {
-                    datatableApi.row.add(item);
-                });
-                datatableApi.draw();
-                $('.delete').click(function () {
-                    deleteRow($(this).closest('tr').attr('id'));
-                });
-            }
-        });
-        return false;
-    };
     $('#filter').submit(filter);
 
     $('.box').change(function () {
         var id = $(this).closest('tr').attr('id');
         var parent = this;
-        $.get(ajaxUrl + "toggle/" + id, function (data) {
-            if ($(parent).is(':checked')) {
+        if ($(parent).is(':checked')) {
+            $.get(ajaxUrl + "toggle/" + id, {enabled:"true"}, function (data) {
                 $(parent).closest('tr').fadeTo(300, 1);
                 successNoty("User enabled");
-            } else {
+            });
+        } else {
+            $.get(ajaxUrl + "toggle/" + id, {enabled:"false"}, function (data) {
                 $(parent).closest('tr').fadeTo(300, 0.3);
                 successNoty("User disabled");
-            }
-        });
+            });
+        }
     });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
+}
+
+function filter() {
+    var form = $('#filter');
+    $.ajax({
+        type: "GET",
+        url: ajaxUrl + "filter",
+        data: form.serialize(),
+        success: function (data) {
+            redraw(data);
+            $('.delete').click(function () {
+                deleteRow($(this).closest('tr').attr('id'));
+            });
+        }
+    });
+    return false;
+}
+
+function redraw(data) {
+    datatableApi.clear();
+    $.each(data, function (key, item) {
+        datatableApi.row.add(item);
+    });
+    datatableApi.draw();
 }
 
 function add() {
@@ -72,11 +77,7 @@ function updateTable() {
         filter();
     } else {
         $.get(ajaxUrl, function (data) {
-            datatableApi.clear();
-            $.each(data, function (key, item) {
-                datatableApi.row.add(item);
-            });
-            datatableApi.draw();
+            redraw(data);
         });
     }
 }

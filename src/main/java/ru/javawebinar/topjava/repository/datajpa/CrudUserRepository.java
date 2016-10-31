@@ -41,6 +41,6 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE User u SET u.enabled=CASE u.enabled WHEN TRUE THEN FALSE ELSE TRUE END WHERE u.id=?1")
-    int toggleEnabled(Integer id);
+    @Query("UPDATE User u SET u.enabled=?1 WHERE u.id=?2")
+    int toggleEnabled(boolean enable, Integer id);
 }

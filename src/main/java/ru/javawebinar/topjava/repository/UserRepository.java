@@ -26,7 +26,7 @@ public interface UserRepository {
         throw new UnsupportedOperationException();
     }
 
-    default int toggleEnabled(Integer id) {
+    default int toggleEnabled(boolean enabled, Integer id) {
         return 0;
     }
 }
