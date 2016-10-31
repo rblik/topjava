@@ -89,6 +89,8 @@ public class AdminRestControllerTest extends AbstractControllerTest {
     public void testToggleEnabled() throws Exception {
         mockMvc.perform(get("/ajax/admin/users/toggle/100000").param("enabled", "false")).andExpect(status().isOk());
         assertFalse(userService.get(100000).isEnabled());
+        jpaUtil.clear2ndLevelHibernateCache();
+        jpaUtil.clear1stLevelHibernateCache();
         mockMvc.perform(get("/ajax/admin/users/toggle/100000").param("enabled", "true")).andExpect(status().isOk());
         assertTrue(userService.get(100000).isEnabled());
 
