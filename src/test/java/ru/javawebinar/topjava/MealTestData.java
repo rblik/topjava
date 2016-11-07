@@ -34,6 +34,8 @@ public class MealTestData {
 
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
 
+    public static final List<Meal> ADMIN_MEALS = Arrays.asList(ADMIN_MEAL2, ADMIN_MEAL1);
+
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
     }
