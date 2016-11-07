@@ -19,7 +19,7 @@ function updateRow(id) {
         $.each(data, function (key, value) {
             // debugger;
             if (key == 'dateTime') {
-                form.find("input[name='" + key + "']").val(value.substring(0, 16));
+                form.find("input[name='" + key + "']").val(value.substring(0, 10) + " " + value.substring(11, 16));
             } else {
                 form.find("input[name='" + key + "']").val(value);
             }
