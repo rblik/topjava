@@ -17,7 +17,12 @@ function updateRow(id) {
     $('#modalTitle').html(edit_title);
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
-            form.find("input[name='" + key + "']").val(value);
+            // debugger;
+            if (key == 'dateTime') {
+                form.find("input[name='" + key + "']").val(value.substring(0, 16));
+            } else {
+                form.find("input[name='" + key + "']").val(value);
+            }
         });
         $('#editRow').modal();
     });
@@ -94,12 +99,12 @@ function failNoty(event, jqXHR, options, jsExc) {
 
 function renderEditBtn(data, type, row) {
     if (type == 'display') {
-        return '<a class="btn btn-xs btn-primary" onclick="updateRow(' + row.id + ');">'+i18n['common.update']+'</a>';
+        return '<a class="btn btn-xs btn-primary" onclick="updateRow(' + row.id + ');">' + i18n['common.update'] + '</a>';
     }
 }
 
 function renderDeleteBtn(data, type, row) {
     if (type == 'display') {
-        return '<a class="btn btn-xs btn-danger" onclick="deleteRow(' + row.id + ');">'+i18n['common.delete']+'</a>';
+        return '<a class="btn btn-xs btn-danger" onclick="deleteRow(' + row.id + ');">' + i18n['common.delete'] + '</a>';
     }
 }
