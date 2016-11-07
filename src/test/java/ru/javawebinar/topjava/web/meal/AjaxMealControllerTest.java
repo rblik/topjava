@@ -29,7 +29,7 @@ public class AjaxMealControllerTest extends AbstractControllerTest{
     @Test
     public void testValid() throws Exception {
         mockMvc.perform(post(AJAX_URL).with(userAuth(USER))
-                .param("dateTime", "2016-11-07T19:20")
+                .param("dateTime", "2016-11-07 19:20")
                 .param("description", "Food")
                 .param("calories", "500"))
                 .andExpect(status().isOk());
