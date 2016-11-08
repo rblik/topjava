@@ -58,6 +58,10 @@ $(function () {
                 $(row).css("color", "green")
             }
         },
+        "language": {
+            "search": "_INPUT_",
+            "searchPlaceholder": i18n['common.search']
+        },
         "initComplete": makeEditable
     });
 });

@@ -69,6 +69,10 @@ $(function () {
                 $(row).css("opacity", 0.3);
             }
         },
+        "language": {
+            "search": "_INPUT_",
+            "searchPlaceholder": i18n['common.search']
+        },
         "initComplete": makeEditable
     });
 });

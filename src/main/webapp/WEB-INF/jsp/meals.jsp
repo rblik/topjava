@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </form>
-                <a class="btn btn-sm btn-info" onclick="add()"><fmt:message key="meals.add"/></a>
+                <a class="btn btn-sm btn-info" onclick="add('<fmt:message key="meals.add"/>')"><fmt:message key="meals.add"/></a>
                 <table class="table table-striped display" id="datatable">
                     <thead>
                     <tr>
@@ -134,6 +134,9 @@
 </div>
 </body>
 <jsp:include page="fragments/inter.jsp"/>
+<script type="text/javascript">
+    var edit_title ='<fmt:message key="meals.edit"/>';
+</script>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="webjars/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
