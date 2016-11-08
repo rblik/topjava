@@ -18,11 +18,7 @@ function updateRow(id) {
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             // debugger;
-            if (key == 'dateTime') {
-                form.find("input[name='" + key + "']").val(value.substring(0, 10) + " " + value.substring(11, 16));
-            } else {
-                form.find("input[name='" + key + "']").val(value);
-            }
+                form.find("input[name='" + key + "']").val(!(key == 'dateTime')? value : value.substring(0, 10) + " " + value.substring(11, 16));
         });
         $('#editRow').modal();
     });

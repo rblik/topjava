@@ -25,7 +25,7 @@ $(function () {
                     if (type == 'display') {
                         return '<span>' + date.substring(0, 10) + " " + date.substring(11, 16) + '</span>';
                     }
-                    return date;
+                    return (type == 'display')? '<span>' + date.substring(0, 10) + " " + date.substring(11, 16) + '</span>' : date;
                 }
             },
             {
@@ -52,11 +52,7 @@ $(function () {
             ]
         ],
         "createdRow": function (row, data, dataIndex) {
-            if (data.exceed) {
-                $(row).css("color", "red")
-            } else {
-                $(row).css("color", "green")
-            }
+            $(row).addClass(data.exceed ? 'exceeded' : 'normal');
         },
         "language": {
             "search": "_INPUT_",

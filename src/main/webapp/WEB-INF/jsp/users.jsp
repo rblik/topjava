@@ -82,7 +82,7 @@
     </div>
 </div>
 </body>
-<jsp:include page="fragments/inter.jsp"/>
+<jsp:include page="fragments/i18n.jsp"/>
 <script type="text/javascript">
     var edit_title ='<fmt:message key="users.edit"/>';
 </script>
