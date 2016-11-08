@@ -143,6 +143,8 @@
 <script type="text/javascript" src="resources/js/datatablesUtil.js"></script>
 <script type="text/javascript" src="resources/js/mealDatatables.js"></script>
 <script type="text/javascript">
+    var localeCode="${pageContext.response.locale}";
+    jQuery.datetimepicker.setLocale(localeCode);
     $('#dateTime').datetimepicker({
         format: 'Y-m-d H:i'
     });

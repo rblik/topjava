@@ -1,10 +1,9 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,13 +16,12 @@ public class AjaxMealControllerTest extends AbstractControllerTest{
 
     @Test
     public void testNotValid() throws Exception {
-        ResultActions actions = mockMvc.perform(post(AJAX_URL).with(userAuth(USER))
-                .param("dateTime", "2016-11-07T19:20")
+        String response = mockMvc.perform(post(AJAX_URL).with(userAuth(USER))
+                .param("dateTime", "2016-11-07 19:20")
                 .param("description", "Food")
                 .param("calories", ""))
-                .andExpect(status().isUnprocessableEntity());
-        String response = actions.andReturn().getResponse().getContentAsString();
-        assertThat(response, CoreMatchers.containsString("calories may not be null"));
+                .andExpect(status().isUnprocessableEntity()).andReturn().getResponse().getContentAsString();
+        assertThat(response, containsString("calories may not be null"));
     }
 
     @Test
