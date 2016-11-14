@@ -7,6 +7,12 @@
     <import resource="spring-tools.xml"/>
     <import resource="spring-security.xml"/>
 
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds" value="60"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>
+    </bean>
+
     <context:annotation-config/>
 
     <context:component-scan base-package="ru.javawebinar.**.service"/>

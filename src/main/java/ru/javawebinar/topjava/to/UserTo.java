@@ -31,7 +31,7 @@ public class UserTo implements Serializable {
     public UserTo() {
     }
 
-    public UserTo(Integer id, String name, String email, String password, int caloriesPerDay) {
+    public UserTo(Integer id, String name, String email, String password, Integer caloriesPerDay) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -75,7 +75,7 @@ public class UserTo implements Serializable {
         return id == null;
     }
 
-    public int getCaloriesPerDay() {
+    public Integer getCaloriesPerDay() {
         return caloriesPerDay;
     }
 

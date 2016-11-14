@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.util.exception.ValidationException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +27,14 @@ public class ExceptionInfoHandler {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ErrorInfo handleError(HttpServletRequest req, NotFoundException e) {
         return logAndGetErrorInfo(req, e, false);
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY) // 422
+    @ExceptionHandler(ValidationException.class)
+    @ResponseBody
+    @Order(Ordered.HIGHEST_PRECEDENCE + 2)
+    public ErrorInfo vaalidation(HttpServletRequest request, ValidationException e) {
+        return logAndGetErrorInfo(request, e, false);
     }
 
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
