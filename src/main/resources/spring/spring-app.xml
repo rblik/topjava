@@ -11,6 +11,7 @@
         <property name="cacheSeconds" value="60"/>
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>
+        <property name="fallbackToSystemLocale" value="false"/>
     </bean>
 
     <context:annotation-config/>

@@ -65,7 +65,18 @@
         </bean>
     -->
 
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="en"/>
+        <property name="cookieName" value="myLocaleCookie"/>
+        <property name="cookieMaxAge" value="4800"/>
+    </bean>
     <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="lang"/>
+            </bean>
+        </mvc:interceptor>
         <bean class="ru.javawebinar.topjava.web.interceptor.ModelInterceptor"/>
     </mvc:interceptors>
 </beans>

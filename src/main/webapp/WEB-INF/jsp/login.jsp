@@ -10,15 +10,26 @@
     <div class="container">
         <div class="navbar-header navbar-brand"><fmt:message key="app.title"/></div>
         <div class="navbar-collapse collapse">
-            <form:form class="navbar-form navbar-right" role="form" action="spring_security_check" method="post">
-                <div class="form-group">
-                    <input type="text" placeholder="Email" class="form-control" name='username'>
-                </div>
-                <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control" name='password'>
-                </div>
-                <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
-            </form:form>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form:form class="navbar-form" role="form" action="spring_security_check" method="post">
+                        <div class="form-group">
+                            <input type="text" placeholder="Email" class="form-control" name='username'>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" class="form-control" name='password'>
+                        </div>
+                        <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
+                    </form:form>
+                </li>
+                <li>
+                    <div class="navbar-form">
+                        <a href="javascript:window.location.href=window.location.href.split('?')[0]+'?lang=en'">Eng</a>
+                        <a onclick="return false">|</a>
+                        <a href="javascript:window.location.href=window.location.href.split('?')[0]+'?lang=ru'">Ru</a>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -41,7 +52,8 @@
 
         <p>Admin login: <b>admin@gmail.com / admin</b></p>
 
-        <p><a class="btn btn-primary btn-lg" role="button" href="register"><fmt:message key="app.register"/> &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" role="button" href="register"><fmt:message key="app.register"/> &raquo;</a>
+        </p>
         <p>Стек технологий: <a href="http://projects.spring.io/spring-security/">Spring Security</a>,
             <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>,
             <a href="http://projects.spring.io/spring-data-jpa/">Spring Data JPA</a>,
