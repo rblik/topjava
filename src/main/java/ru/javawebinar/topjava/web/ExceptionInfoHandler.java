@@ -42,6 +42,14 @@ public class ExceptionInfoHandler {
     @ResponseBody
     @Order(Ordered.HIGHEST_PRECEDENCE + 1)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+        if (e.getRootCause().getLocalizedMessage().contains("email")) {
+            e = new DataIntegrityViolationException("User with this email already present in application");
+            return logAndGetErrorInfo(req, e, true);
+        }
+        if (e.getRootCause().getLocalizedMessage().contains("datetime")) {
+            e = new DataIntegrityViolationException("You've already eaten in this time :)");
+            return logAndGetErrorInfo(req, e, true);
+        }
         return logAndGetErrorInfo(req, e, true);
     }
 

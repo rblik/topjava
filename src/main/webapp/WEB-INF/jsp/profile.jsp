@@ -25,7 +25,6 @@
                     <fmt:message key="common.update" var="saveButton"/>
                 </c:if>
             </h3>
-
             <div class="view-box">
                 <form:form modelAttribute="userTo" class="form-horizontal" method="post"
                            action="${register ? 'register' : 'profile'}" charset="utf-8" accept-charset="UTF-8">
@@ -34,7 +33,7 @@
                     <topjava:inputField label='${userName}' name="name"/>
 
                     <fmt:message key="users.email" var="userEmail"/>
-                    <topjava:inputField label='${userEmail}' name="email"/>
+                    <topjava:inputField label='${userEmail}' name="email" inputType="email"/>
 
                     <fmt:message key="users.password" var="userPassword"/>
                     <topjava:inputField label='${userPassword}' name="password" inputType="password"/>

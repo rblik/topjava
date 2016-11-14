@@ -7,7 +7,7 @@
 <%@ attribute name="inputType" required="false" description="Input type" %>
 
 <spring:bind path="${name}">
-    <c:set var="cssGroup" value="form-group ${status.error ? 'error' : '' }"/>
+    <c:set var="cssGroup" value="form-group ${status.error || (inputType == 'email' && exception != null)? 'error' : '' }"/>
     <div class="${cssGroup}">
         <label class="control-label col-xs-2">${label}</label>
 
@@ -17,6 +17,7 @@
                 <c:when test="${inputType == 'number'}"><form:input path="${name}" type="number"/></c:when>
                 <c:otherwise><form:input path="${name}"/></c:otherwise>
             </c:choose>
+            <span class="help-inline">${(inputType == 'email' && exception != null)? exception.message:''}</span>
             &nbsp;<span class="help-inline">${status.errorMessage}</span>
         </div>
     </div>
