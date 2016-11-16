@@ -3,9 +3,11 @@ package ru.javawebinar.topjava.web.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindingResult;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
+import ru.javawebinar.topjava.util.exception.ValidationException;
 
 import java.util.List;
 
@@ -59,4 +61,11 @@ public abstract class AbstractUserController {
         log.info((enabled ? "enable " : "disable ") + id);
         service.enable(id, enabled);
     }
+
+    protected void throwException(BindingResult result) {
+        StringBuilder sb = new StringBuilder();
+        result.getFieldErrors().forEach(fe -> sb.append(fe.getField()).append(" ").append(fe.getDefaultMessage()));
+        throw new ValidationException(sb.toString());
+    }
+
 }

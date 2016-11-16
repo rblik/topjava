@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.util.exception.ValidationException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -34,9 +33,7 @@ public class AdminRestController extends AbstractUserController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            result.getFieldErrors().forEach(fe -> sb.append(fe.getField()).append(" ").append(fe.getDefaultMessage()));
-            throw new ValidationException(sb.toString());
+            throwException(result);
         }
 
         User created = super.create(user);
@@ -59,9 +56,7 @@ public class AdminRestController extends AbstractUserController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@Valid @RequestBody User user, BindingResult result, @PathVariable("id") int id) {
         if (result.hasErrors()) {
-            StringBuilder sb = new StringBuilder();
-            result.getFieldErrors().forEach(fe -> sb.append(fe.getField()).append(" ").append(fe.getDefaultMessage()));
-            throw new ValidationException(sb.toString());
+            throwException(result);
         }
         super.update(user, id);
     }
@@ -70,4 +65,5 @@ public class AdminRestController extends AbstractUserController {
     public User getByMail(@RequestParam("email") String email) {
         return super.getByMail(email);
     }
+
 }
