@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.web.RootController.throwException;
+
 /**
  * gkislin
  * 16.10.2016

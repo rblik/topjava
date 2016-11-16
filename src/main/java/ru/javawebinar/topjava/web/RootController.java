@@ -9,6 +9,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.exception.ValidationException;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
 import javax.validation.Valid;
@@ -81,5 +82,11 @@ public class RootController extends AbstractUserController {
             status.setComplete();
             return "redirect:login?message=app.registered";
         }
+    }
+
+    public static void throwException(BindingResult result) {
+        StringBuilder sb = new StringBuilder();
+        result.getFieldErrors().forEach(fe -> sb.append(fe.getField()).append(" ").append(fe.getDefaultMessage()));
+        throw new ValidationException(sb.toString());
     }
 }

@@ -11,6 +11,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static ru.javawebinar.topjava.web.RootController.throwException;
+
 /**
  * GKislin
  * 06.03.2015.

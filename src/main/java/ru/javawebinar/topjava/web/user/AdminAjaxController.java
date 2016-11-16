@@ -10,6 +10,8 @@ import ru.javawebinar.topjava.util.UserUtil;
 import javax.validation.Valid;
 import java.util.List;
 
+import static ru.javawebinar.topjava.web.RootController.throwException;
+
 /**
  * User: grigory.kislin
  */

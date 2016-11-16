@@ -22,13 +22,7 @@
                         <button type="submit" class="btn btn-success"><fmt:message key="app.login"/></button>
                     </form:form>
                 </li>
-                <li>
-                    <div class="navbar-form">
-                        <a href="javascript:window.location.href=window.location.href.split('?')[0]+'?lang=en'">Eng</a>
-                        <a onclick="return false">|</a>
-                        <a href="javascript:window.location.href=window.location.href.split('?')[0]+'?lang=ru'">Ru</a>
-                    </div>
-                </li>
+                <jsp:include page="fragments/localeChanger.jsp"/>
             </ul>
         </div>
     </div>
