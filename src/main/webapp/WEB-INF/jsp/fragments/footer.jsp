@@ -12,7 +12,9 @@
     <c:forEach var='key' items='<%=new String[]{"common.update","common.delete","common.deleted","common.saved","common.enabled","common.disabled","common.failed","common.search"}%>'>
     i18n['${key}'] = '<spring:message code="${key}"/>';
     </c:forEach>
+    var elementsByClassName = document.getElementById("loader");
     document.getElementById("oauthRegister").onclick = function () {
+        elementsByClassName.style.display = "inherit";
         location.href = "oauth/github/authorize?action=register";
     };
 </script>

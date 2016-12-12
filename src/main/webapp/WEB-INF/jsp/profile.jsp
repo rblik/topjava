@@ -42,10 +42,11 @@
                     <spring:message code="users.caloriesPerDay" var="caloriesPerDay"/>
                     <topjava:inputField label='${caloriesPerDay}' name="caloriesPerDay" inputType="number"/>
 
-                    <div class="loader"></div>
-
                     <div class="form-group">
-                        <div class="col-xs-offset-2 col-xs-10">
+                        <div class=" col-xs-offset-2 control-label" id="loader" style="display: none">
+                            <div class="loader"></div>
+                        </div>
+                        <div class="col-xs-offset-2 col-xs-8">
                             <button type="button" id="oauthRegister" class="btn btn-social btn-github" style="display: ${register==null? 'none':'inline'}">
                                 <span class="fa fa-github"></span>
                                 <spring:message code="app.register.github"/> &raquo;
