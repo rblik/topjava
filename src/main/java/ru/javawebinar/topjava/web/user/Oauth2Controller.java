@@ -23,6 +23,7 @@ import static org.springframework.security.core.context.SecurityContextHolder.ge
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
 @Controller
+@RequestMapping("/oauth/github")
 public class Oauth2Controller {
     @Autowired
     private UserDetailsService service;
@@ -33,14 +34,16 @@ public class Oauth2Controller {
 
     private static final String AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
     private static final String ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
+    private static final String GET_EMAIL_URL = "https://api.github.com/user/emails";
+    private static final String GET_LOGIN_URL = "https://api.github.com/user";
 
-    @RequestMapping("/oauth/github/authorize")
+    @RequestMapping("/authorize")
     public String authorize(@RequestParam String action) {
         String code = "register".equals(action) ? "topjava_csrf_token_register" : "topjava_csrf_token_auth";
         return "redirect:" + AUTHORIZE_URL + "?client_id=" + source.getClientId() + "&client_secret=" + source.getClientSecret() + "&redirect_uri=" + source.getRedirectUri() + "&scope=" + source.getScope() + "&state=" + code;
     }
 
-    @RequestMapping("/oauth/github/callback")
+    @RequestMapping("/callback")
     public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
         if (state.equals("topjava_csrf_token_register")) {
 //            request.getParameterMap() = new HashMap<>();
@@ -62,7 +65,7 @@ public class Oauth2Controller {
         String accessToken = tokenEntity.getBody().get("access_token").asText();
 
 //        getting user email
-        builder = fromHttpUrl("https://api.github.com/user/emails").queryParam("access_token", accessToken);
+        builder = fromHttpUrl(GET_EMAIL_URL).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityEmail = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
         String email = entityEmail.getBody().get(0).get("email").asText();
 
@@ -86,12 +89,12 @@ public class Oauth2Controller {
         ResponseEntity<JsonNode> tokenEntity = template.postForEntity(builder.build().encode().toUri(), null, JsonNode.class);
         String accessToken = tokenEntity.getBody().get("access_token").asText();
 
-        builder = fromHttpUrl("https://api.github.com/user/emails").queryParam("access_token", accessToken);
+        builder = fromHttpUrl(GET_EMAIL_URL).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityEmail = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
         String email = entityEmail.getBody().get(0).get("email").asText();
 
 //        getting user login
-        builder = fromHttpUrl("https://api.github.com/user").queryParam("access_token", accessToken);
+        builder = fromHttpUrl(GET_LOGIN_URL).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityUser = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
         String login = entityUser.getBody().get("login").asText();
 
