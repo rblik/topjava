@@ -1,10 +1,12 @@
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns="http://www.springframework.org/schema/security"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:p="http://www.springframework.org/schema/p"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security.xsd">
+	http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <http pattern="/resources/**" security="none"/>
     <http pattern="/webjars/**" security="none"/>
@@ -17,6 +19,7 @@
     </http>
 
     <http>
+        <intercept-url pattern="/oauth/**" access="permitAll"/>
         <intercept-url pattern="/login" access="permitAll"/>
         <intercept-url pattern="/register" access="permitAll"/>
 
@@ -49,4 +52,10 @@
             -->
         </authentication-provider>
     </authentication-manager>
+    <beans:bean id="gitHubSource" class="ru.javawebinar.topjava.web.oauth.GitHubSource"
+                p:clientId="53cbe0812f6d580c9c2e"
+                p:clientSecret="6db047074c0960ed716b3247c53be9e16d86c390"
+                p:redirectUri="http://localhost:8080/topjava/oauth/github/callback"
+                p:state="topjava_csrf_token"
+                p:scope="user"/>
 </beans:beans>

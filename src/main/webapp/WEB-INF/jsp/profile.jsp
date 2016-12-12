@@ -29,12 +29,12 @@
             <div class="view-box">
                 <form:form modelAttribute="userTo" class="form-horizontal" method="post"
                            action="${register ? 'register' : 'profile'}" charset="utf-8" accept-charset="UTF-8">
-
+                    <p><a class="btn btn-github btn-lg" role="button" href="oauth/github/authorize?action=register" style="display: ${register==null? 'none':'inline'}"><spring:message code="app.register.github"/> &raquo;</a></p>
                     <spring:message code="users.name" var="userName"/>
-                    <topjava:inputField label='${userName}' name="name"/>
+                    <topjava:inputField label='${userName}' name="name" social="${social}"/>
 
                     <spring:message code="users.email" var="userEmail"/>
-                    <topjava:inputField label='${userEmail}' name="email"/>
+                    <topjava:inputField label='${userEmail}' name="email" social="${social}"/>
 
                     <spring:message code="users.password" var="userPassword"/>
                     <topjava:inputField label='${userPassword}' name="password" inputType="password"/>

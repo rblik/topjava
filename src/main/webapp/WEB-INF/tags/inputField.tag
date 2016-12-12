@@ -5,6 +5,7 @@
 <%@ attribute name="name" required="true" description="Name of corresponding property in bean object" %>
 <%@ attribute name="label" required="true" description="Field label" %>
 <%@ attribute name="inputType" required="false" description="Input type" %>
+<%@ attribute name="social" required="false" description="Register type" %>
 
 <spring:bind path="${name}">
     <div class="form-group ${status.error ? 'error' : '' }">
@@ -14,7 +15,7 @@
             <c:choose>
                 <c:when test="${inputType == 'password'}"><form:password path="${name}"/></c:when>
                 <c:when test="${inputType == 'number'}"><form:input path="${name}" type="number"/></c:when>
-                <c:otherwise><form:input path="${name}"/></c:otherwise>
+                <c:otherwise><form:input path="${name}" disabled="${social==true? 'true': 'false'}"/></c:otherwise>
             </c:choose>
             &nbsp;<span class="help-inline">${status.errorMessage}</span>
         </div>

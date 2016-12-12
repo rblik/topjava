@@ -14,5 +14,6 @@
 
     <link rel="stylesheet" href="resources/css/style.css">
     <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/bootstrap-social/5.0.0/bootstrap-social.css">
     <link rel="shortcut icon" href="resources/images/icon-meal.png">
 </head>

@@ -14,6 +14,8 @@
                 <li>
                     <form:form class="navbar-form" role="form" action="spring_security_check"
                                method="post">
+                        <a href="oauth/github/authorize?action=auth" role="button"
+                           class="btn btn-github"><spring:message code="app.login.github"/></a>
                         <div class="form-group">
                             <input type="text" placeholder="Email" class="form-control" name='username'>
                         </div>
@@ -23,7 +25,11 @@
                         <button type="submit" class="btn btn-success"><spring:message code="app.login"/></button>
                     </form:form>
                 </li>
-                <jsp:include page="fragments/lang.jsp"/>
+                <li>
+                    <jsp:include page="fragments/lang.jsp"/>
+                </li>
+                <li>
+                </li>
             </ul>
         </div>
     </div>
@@ -47,7 +53,8 @@
 
         <p>Admin login: <b>admin@gmail.com / admin</b></p>
 
-        <p><a class="btn btn-primary btn-lg" role="button" href="register"><spring:message code="app.register"/> &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" role="button" href="register"><spring:message
+                code="app.register"/> &raquo;</a></p>
         <p>Стек технологий: <a href="http://projects.spring.io/spring-security/">Spring Security</a>,
             <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">Spring MVC</a>,
             <a href="http://projects.spring.io/spring-data-jpa/">Spring Data JPA</a>,
