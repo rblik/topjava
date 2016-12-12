@@ -6,7 +6,6 @@ public class GitHubSource {
     private String clientSecret;
     private String redirectUri;
     private String scope;
-    private String state;
 
     public String getClientId() {
         return clientId;
@@ -38,13 +37,5 @@ public class GitHubSource {
 
     public void setScope(String scope) {
         this.scope = scope;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 }

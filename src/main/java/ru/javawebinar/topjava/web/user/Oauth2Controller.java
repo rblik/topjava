@@ -46,21 +46,22 @@ public class Oauth2Controller {
     @RequestMapping("/callback")
     public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
         if (state.equals("topjava_csrf_token_register")) {
-//            request.getParameterMap() = new HashMap<>();
             UserTo to = getUserTo(code);
-            return new ModelAndView("profile").addObject("userTo", to).addObject("register", true).addObject("social", true);
+            request.getSession().setAttribute("userTo", to);
+            return new ModelAndView("redirect:/register");
         } else if (state.equals("topjava_csrf_token_auth")) {
-            return getModelAndView(code, request);
+            return mavWithAuth(code, request);
         }
         return null;
     }
 
-    private ModelAndView getModelAndView(String code, HttpServletRequest request) {
+    private ModelAndView mavWithAuth(String code, HttpServletRequest request) {
 //        getting access token
         UriComponentsBuilder builder = fromHttpUrl(ACCESS_TOKEN_URL)
                 .queryParam("client_id", source.getClientId())
                 .queryParam("client_secret", source.getClientSecret())
-                .queryParam("code", code);
+                .queryParam("code", code)
+                .queryParam("redirect_uri", source.getRedirectUri());
         ResponseEntity<JsonNode> tokenEntity = template.postForEntity(builder.build().encode().toUri(), null, JsonNode.class);
         String accessToken = tokenEntity.getBody().get("access_token").asText();
 
@@ -85,7 +86,8 @@ public class Oauth2Controller {
         UriComponentsBuilder builder = fromHttpUrl(ACCESS_TOKEN_URL)
                 .queryParam("client_id", source.getClientId())
                 .queryParam("client_secret", source.getClientSecret())
-                .queryParam("code", code);
+                .queryParam("code", code)
+                .queryParam("redirect_uri", source.getRedirectUri());
         ResponseEntity<JsonNode> tokenEntity = template.postForEntity(builder.build().encode().toUri(), null, JsonNode.class);
         String accessToken = tokenEntity.getBody().get("access_token").asText();
 

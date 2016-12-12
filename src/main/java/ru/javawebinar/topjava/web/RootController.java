@@ -12,6 +12,7 @@ import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -69,9 +70,12 @@ public class RootController extends AbstractUserController {
     }
 
     @GetMapping("/register")
-    public String register(ModelMap model) {
-        model.addAttribute("userTo", new UserTo());
+    public String register(ModelMap model, HttpServletRequest request) {
+        Object to = request.getSession().getAttribute("userTo");
+        model.addAttribute("userTo", to == null ? new UserTo() : (UserTo) to);
+        model.addAttribute("social", to != null);
         model.addAttribute("register", true);
+        request.getSession().removeAttribute("userTo");
         return "profile";
     }
 

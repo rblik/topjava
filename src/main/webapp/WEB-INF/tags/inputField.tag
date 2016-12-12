@@ -15,7 +15,7 @@
             <c:choose>
                 <c:when test="${inputType == 'password'}"><form:password path="${name}"/></c:when>
                 <c:when test="${inputType == 'number'}"><form:input path="${name}" type="number"/></c:when>
-                <c:otherwise><form:input path="${name}" disabled="${social==true? 'true': 'false'}"/></c:otherwise>
+                <c:otherwise><form:input path="${name}" readonly="${social==true? 'true': 'false'}" cssStyle="background-color: ${social==true? '#9feba6': 'white'}"/></c:otherwise>
             </c:choose>
             &nbsp;<span class="help-inline">${status.errorMessage}</span>
         </div>

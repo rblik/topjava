@@ -29,7 +29,7 @@
             <div class="view-box">
                 <form:form modelAttribute="userTo" class="form-horizontal" method="post"
                            action="${register ? 'register' : 'profile'}" charset="utf-8" accept-charset="UTF-8">
-                    <p><a class="btn btn-github btn-lg" role="button" href="oauth/github/authorize?action=register" style="display: ${register==null? 'none':'inline'}"><spring:message code="app.register.github"/> &raquo;</a></p>
+
                     <spring:message code="users.name" var="userName"/>
                     <topjava:inputField label='${userName}' name="name" social="${social}"/>
 
@@ -42,8 +42,14 @@
                     <spring:message code="users.caloriesPerDay" var="caloriesPerDay"/>
                     <topjava:inputField label='${caloriesPerDay}' name="caloriesPerDay" inputType="number"/>
 
+                    <div class="loader"></div>
+
                     <div class="form-group">
                         <div class="col-xs-offset-2 col-xs-10">
+                            <button type="button" id="oauthRegister" class="btn btn-social btn-github" style="display: ${register==null? 'none':'inline'}">
+                                <span class="fa fa-github"></span>
+                                <spring:message code="app.register.github"/> &raquo;
+                            </button>
                             <button type="submit" class="btn btn-primary">${saveButton}</button>
                         </div>
                     </div>

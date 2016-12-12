@@ -14,8 +14,10 @@
                 <li>
                     <form:form class="navbar-form" role="form" action="spring_security_check"
                                method="post">
-                        <a href="oauth/github/authorize?action=auth" role="button"
-                           class="btn btn-github"><spring:message code="app.login.github"/></a>
+                        <a href="oauth/github/authorize?action=auth" role="button" class="btn btn-social btn-github">
+                            <span class="fa fa-github"></span>
+                            <spring:message code="app.login.github"/>
+                        </a>
                         <div class="form-group">
                             <input type="text" placeholder="Email" class="form-control" name='username'>
                         </div>

@@ -56,6 +56,5 @@
                 p:clientId="53cbe0812f6d580c9c2e"
                 p:clientSecret="6db047074c0960ed716b3247c53be9e16d86c390"
                 p:redirectUri="http://localhost:8080/topjava/oauth/github/callback"
-                p:state="topjava_csrf_token"
                 p:scope="user"/>
 </beans:beans>

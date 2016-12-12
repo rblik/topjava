@@ -12,6 +12,9 @@
     <c:forEach var='key' items='<%=new String[]{"common.update","common.delete","common.deleted","common.saved","common.enabled","common.disabled","common.failed","common.search"}%>'>
     i18n['${key}'] = '<spring:message code="${key}"/>';
     </c:forEach>
+    document.getElementById("oauthRegister").onclick = function () {
+        location.href = "oauth/github/authorize?action=register";
+    };
 </script>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
