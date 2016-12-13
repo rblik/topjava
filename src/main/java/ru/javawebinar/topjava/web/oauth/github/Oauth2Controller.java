@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.web.user;
+package ru.javawebinar.topjava.web.oauth.github;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.javawebinar.topjava.to.UserTo;
-import ru.javawebinar.topjava.web.oauth.GitHubSource;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
+import static ru.javawebinar.topjava.web.oauth.github.GitHubOauthData.*;
 
 @Controller
 @RequestMapping("/oauth/github")
@@ -28,49 +28,54 @@ public class Oauth2Controller {
     @Autowired
     private UserDetailsService service;
     @Autowired
-    private GitHubSource source;
-    @Autowired
     private RestTemplate template;
-
-    private static final String AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
-    private static final String ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
-    private static final String GET_EMAIL_URL = "https://api.github.com/user/emails";
-    private static final String GET_LOGIN_URL = "https://api.github.com/user";
 
     @RequestMapping("/authorize")
     public String authorize(@RequestParam String action) {
         String code = "register".equals(action) ? "topjava_csrf_token_register" : "topjava_csrf_token_auth";
-        return "redirect:" + AUTHORIZE_URL + "?client_id=" + source.getClientId() + "&client_secret=" + source.getClientSecret() + "&redirect_uri=" + source.getRedirectUri() + "&scope=" + source.getScope() + "&state=" + code;
+        return "redirect:" + AUTHORIZE_URL + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&redirect_uri=" + REDIRECT_URI + "&scope=" + SCOPE + "&state=" + code;
     }
 
     @RequestMapping("/callback")
     public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
         if (state.equals("topjava_csrf_token_register")) {
-            UserTo to = getUserTo(code);
+            String accessToken = getAccessToken(code);
+            String email = getEmail(accessToken);
+            String login = getLogin(accessToken);
+            UserTo to = new UserTo(login, email);
             request.getSession().setAttribute("userTo", to);
             return new ModelAndView("redirect:/register");
         } else if (state.equals("topjava_csrf_token_auth")) {
-            return mavWithAuth(code, request);
+            String accessToken = getAccessToken(code);
+            String email = getEmail(accessToken);
+            return authorizeAndGetMav(request, email);
         }
         return null;
     }
 
-    private ModelAndView mavWithAuth(String code, HttpServletRequest request) {
-//        getting access token
+    private String getAccessToken(String code) {
         UriComponentsBuilder builder = fromHttpUrl(ACCESS_TOKEN_URL)
-                .queryParam("client_id", source.getClientId())
-                .queryParam("client_secret", source.getClientSecret())
+                .queryParam("client_id", CLIENT_ID)
+                .queryParam("client_secret", CLIENT_SECRET)
                 .queryParam("code", code)
-                .queryParam("redirect_uri", source.getRedirectUri());
+                .queryParam("redirect_uri", REDIRECT_URI);
         ResponseEntity<JsonNode> tokenEntity = template.postForEntity(builder.build().encode().toUri(), null, JsonNode.class);
-        String accessToken = tokenEntity.getBody().get("access_token").asText();
+        return tokenEntity.getBody().get("access_token").asText();
+    }
 
-//        getting user email
-        builder = fromHttpUrl(GET_EMAIL_URL).queryParam("access_token", accessToken);
+    private String getEmail(String accessToken) {
+        UriComponentsBuilder builder = fromHttpUrl(GET_EMAIL_URL).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityEmail = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
-        String email = entityEmail.getBody().get(0).get("email").asText();
+        return entityEmail.getBody().get(0).get("email").asText();
+    }
 
-//        authenticate in context
+    private String getLogin(String accessToken) {
+        UriComponentsBuilder builder = fromHttpUrl(GET_LOGIN_URL).queryParam("access_token", accessToken);
+        ResponseEntity<JsonNode> entityUser = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
+        return entityUser.getBody().get("login").asText();
+    }
+
+    private ModelAndView authorizeAndGetMav(HttpServletRequest request, String email) {
         try {
             UserDetails userDetails = service.loadUserByUsername(email);
             getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
@@ -80,26 +85,5 @@ public class Oauth2Controller {
             request.getSession().setAttribute("SPRING_SECURITY_LAST_EXCEPTION", new BadCredentialsException("Bad credentials"));
             return new ModelAndView("login").addObject("error", true);
         }
-    }
-
-    private UserTo getUserTo(String code) {
-        UriComponentsBuilder builder = fromHttpUrl(ACCESS_TOKEN_URL)
-                .queryParam("client_id", source.getClientId())
-                .queryParam("client_secret", source.getClientSecret())
-                .queryParam("code", code)
-                .queryParam("redirect_uri", source.getRedirectUri());
-        ResponseEntity<JsonNode> tokenEntity = template.postForEntity(builder.build().encode().toUri(), null, JsonNode.class);
-        String accessToken = tokenEntity.getBody().get("access_token").asText();
-
-        builder = fromHttpUrl(GET_EMAIL_URL).queryParam("access_token", accessToken);
-        ResponseEntity<JsonNode> entityEmail = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
-        String email = entityEmail.getBody().get(0).get("email").asText();
-
-//        getting user login
-        builder = fromHttpUrl(GET_LOGIN_URL).queryParam("access_token", accessToken);
-        ResponseEntity<JsonNode> entityUser = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
-        String login = entityUser.getBody().get("login").asText();
-
-        return new UserTo(login, email);
     }
 }
