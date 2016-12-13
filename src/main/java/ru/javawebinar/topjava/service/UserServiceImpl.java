@@ -17,6 +17,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.UserUtil.createNewFromTo;
 import static ru.javawebinar.topjava.util.UserUtil.prepareToSave;
 import static ru.javawebinar.topjava.util.UserUtil.updateFromTo;
 
@@ -96,6 +97,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (u == null) {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
+        return new AuthorizedUser(u);
+    }
+
+    @Override
+    public AuthorizedUser loadOrSaveByEmail(String email, UserTo userTo) {
+        User u = repository.getByEmail(email.toLowerCase());
+        if (u == null) {
+            save(createNewFromTo(userTo));
+        }
+        u = repository.getByEmail(email.toLowerCase());
         return new AuthorizedUser(u);
     }
 

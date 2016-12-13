@@ -43,9 +43,10 @@ public class UserTo implements Serializable {
         this.caloriesPerDay = caloriesPerDay;
     }
 
-    public UserTo(String name, String email) {
+    public UserTo(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {
