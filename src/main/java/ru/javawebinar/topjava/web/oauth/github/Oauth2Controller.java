@@ -30,7 +30,7 @@ public class Oauth2Controller {
     private UserService userService;
 
     @RequestMapping("/authorize")
-    public String authorize(@RequestParam String action) {
+    public String authorize() {
         return "redirect:" + AUTHORIZE_URL + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&redirect_uri=" + REDIRECT_URI + "&scope=" + SCOPE + "&state=" + CODE;
     }
 

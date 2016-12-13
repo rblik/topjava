@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User u = repository.getByEmail(email.toLowerCase());
         if (u == null) {
             save(createNewFromTo(userTo));
+            u = repository.getByEmail(email.toLowerCase());
         }
-        u = repository.getByEmail(email.toLowerCase());
         return new AuthorizedUser(u);
     }
 
