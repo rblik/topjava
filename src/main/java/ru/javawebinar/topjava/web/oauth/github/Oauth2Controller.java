@@ -5,15 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -27,7 +29,7 @@ public class Oauth2Controller {
     @Autowired
     private RestTemplate template;
     @Autowired
-    private UserService userService;
+    private UserDetailsService service;
 
     @RequestMapping("/authorize")
     public String authorize() {
@@ -35,10 +37,10 @@ public class Oauth2Controller {
     }
 
     @RequestMapping("/callback")
-    public ModelAndView authenticate(@RequestParam String code, @RequestParam String state) {
+    public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
         if (state.equals("topjava_csrf_token_auth")) {
             String accessToken = getAccessToken(code);
-            return authorizeAndRedirect(getLoginAndId(accessToken), getEmail(accessToken));
+            return authorizeAndRedirect(getLoginAndId(accessToken), getEmail(accessToken), request);
         }
         return null;
     }
@@ -67,9 +69,14 @@ public class Oauth2Controller {
         return asList(login, id);
     }
 
-    private ModelAndView authorizeAndRedirect(List<String> loginAndId, String email) {
-        UserDetails userDetails = userService.loadOrSaveByEmail(email, new UserTo(loginAndId.get(0), email, CLIENT_ID + loginAndId.get(1)));
-        getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
-        return new ModelAndView("redirect:/meals");
+    private ModelAndView authorizeAndRedirect(List<String> loginAndId, String email, HttpServletRequest request) {
+        try {
+            UserDetails userDetails = service.loadUserByUsername(email);
+            getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+            return new ModelAndView("redirect:/meals");
+        } catch (UsernameNotFoundException ex) {
+            request.getSession().setAttribute("userTo", new UserTo(loginAndId.get(0), email));
+            return new ModelAndView("redirect:/register");
+        }
     }
 }

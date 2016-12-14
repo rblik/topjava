@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -31,8 +30,6 @@ public interface UserService {
     void evictCache();
 
     void enable(int id, boolean enable);
-
-    AuthorizedUser loadOrSaveByEmail(String email, UserTo userTo);
 
     User getWithMeals(int id);
 }

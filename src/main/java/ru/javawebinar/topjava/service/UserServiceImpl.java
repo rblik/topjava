@@ -101,16 +101,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public AuthorizedUser loadOrSaveByEmail(String email, UserTo userTo) {
-        User u = repository.getByEmail(email.toLowerCase());
-        if (u == null) {
-            save(createNewFromTo(userTo));
-            u = repository.getByEmail(email.toLowerCase());
-        }
-        return new AuthorizedUser(u);
-    }
-
-    @Override
     public User getWithMeals(int id) {
         return ExceptionUtil.checkNotFoundWithId(repository.getWithMeals(id), id);
     }
