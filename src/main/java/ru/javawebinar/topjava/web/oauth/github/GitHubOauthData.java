@@ -9,5 +9,4 @@ public class GitHubOauthData {
     protected static final String CLIENT_SECRET = "6db047074c0960ed716b3247c53be9e16d86c390";
     protected static final String REDIRECT_URI = "http://localhost:8080/topjava/oauth/github/callback";
     protected static final String CODE = "topjava_csrf_token_auth";
-    protected static final String SCOPE = "user";
 }

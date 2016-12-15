@@ -90,7 +90,7 @@ public class RootController extends AbstractUserController {
             try {
                 User user = super.create(UserUtil.createNewFromTo(userTo));
                 status.setComplete();
-                if (social) {
+                if (social != null) {
                     UserDetails userDetails = new AuthorizedUser(user);
                     getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
                     return "redirect:/meals";
@@ -100,6 +100,8 @@ public class RootController extends AbstractUserController {
             } catch (DataIntegrityViolationException ex) {
                 result.rejectValue("email", "exception.duplicate_email");
             }
+        } else {
+            model.addAttribute("social", social);
         }
         model.addAttribute("register", true);
         return "profile";
