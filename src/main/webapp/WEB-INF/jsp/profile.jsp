@@ -31,26 +31,21 @@
                            action="${register ? 'register' : 'profile'}" charset="utf-8" accept-charset="UTF-8">
 
                     <spring:message code="users.name" var="userName"/>
-                    <topjava:inputField label='${userName}' name="name" social="${social}"/>
+                    <topjava:inputField label='${userName}' name="name"/>
 
                     <spring:message code="users.email" var="userEmail"/>
-                    <topjava:inputField label='${userEmail}' name="email" social="${social}"/>
+                    <topjava:inputField label='${userEmail}' name="email" isSocial="${social}"/>
 
                     <spring:message code="users.password" var="userPassword"/>
                     <topjava:inputField label='${userPassword}' name="password" inputType="password"/>
 
                     <spring:message code="users.caloriesPerDay" var="caloriesPerDay"/>
                     <topjava:inputField label='${caloriesPerDay}' name="caloriesPerDay" inputType="number"/>
+                    
+                    <input name="social" value="${social}" type="hidden">
 
                     <div class="form-group">
-                        <%--<div class=" col-xs-offset-2 control-label" id="loader" style="display: none">
-                            <div class="loader"></div>
-                        </div>--%>
                         <div class="col-xs-offset-2 col-xs-8">
-                            <%--<button type="button" id="oauthRegister" class="btn btn-social btn-github" style="display: ${register==null? 'none':'inline'}">
-                                <span class="fa fa-github"></span>
-                                <spring:message code="app.register.github"/> &raquo;
-                            </button>--%>
                             <button type="submit" class="btn btn-primary">${saveButton}</button>
                         </div>
                     </div>

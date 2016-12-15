@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.javawebinar.topjava.to.UserTo;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
@@ -35,10 +34,10 @@ public class Oauth2Controller {
     }
 
     @RequestMapping("/callback")
-    public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
+    public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, RedirectAttributes attr) {
         if (state.equals("topjava_csrf_token_auth")) {
             String accessToken = getAccessToken(code);
-            return authorizeAndRedirect(getLogin(accessToken), getEmail(accessToken), request);
+            return authorizeAndRedirect(getLogin(accessToken), getEmail(accessToken), attr);
         }
         return null;
     }
@@ -65,13 +64,13 @@ public class Oauth2Controller {
         return entityUser.getBody().get("login").asText();
     }
 
-    private ModelAndView authorizeAndRedirect(String login, String email, HttpServletRequest request) {
+    private ModelAndView authorizeAndRedirect(String login, String email, RedirectAttributes attr) {
         try {
             UserDetails userDetails = service.loadUserByUsername(email);
             getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
             return new ModelAndView("redirect:/meals");
         } catch (UsernameNotFoundException ex) {
-            request.getSession().setAttribute("userTo", new UserTo(login, email));
+            attr.addFlashAttribute("userTo", new UserTo(login, email));
             return new ModelAndView("redirect:/register");
         }
     }

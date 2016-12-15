@@ -1,19 +1,25 @@
 package ru.javawebinar.topjava.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import ru.javawebinar.topjava.AuthorizedUser;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 /**
  * User: gkislin
@@ -70,22 +76,29 @@ public class RootController extends AbstractUserController {
     }
 
     @GetMapping("/register")
-    public String register(ModelMap model, HttpServletRequest request) {
-        Object to = request.getSession().getAttribute("userTo");
-        model.addAttribute("userTo", to == null ? new UserTo() : (UserTo) to);
-        model.addAttribute("social", to != null);
+    public String register(ModelMap model) {
+        boolean social = model.containsAttribute("userTo");
+        if (!social) {
+            model.addAttribute("userTo", new UserTo());
+        }
+        model.addAttribute("social", social);
         model.addAttribute("register", true);
-        request.getSession().removeAttribute("userTo");
         return "profile";
     }
 
     @PostMapping("/register")
-    public String saveRegister(@Valid UserTo userTo, BindingResult result, SessionStatus status, ModelMap model) {
+    public String saveRegister(@Valid UserTo userTo, BindingResult result, SessionStatus status, ModelMap model, Boolean social) {
         if (!result.hasErrors()) {
             try {
-                super.create(UserUtil.createNewFromTo(userTo));
+                User user = super.create(UserUtil.createNewFromTo(userTo));
                 status.setComplete();
-                return "redirect:login?message=app.registered";
+                if (social) {
+                    UserDetails userDetails = new AuthorizedUser(user);
+                    getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
+                    return "redirect:/meals";
+                } else {
+                    return "redirect:login?message=app.registered";
+                }
             } catch (DataIntegrityViolationException ex) {
                 result.rejectValue("email", "exception.duplicate_email");
             }
