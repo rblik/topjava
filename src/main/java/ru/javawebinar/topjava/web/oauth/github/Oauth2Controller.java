@@ -16,9 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ru.javawebinar.topjava.to.UserTo;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 import static ru.javawebinar.topjava.web.oauth.github.GitHubOauthData.*;
@@ -40,7 +38,7 @@ public class Oauth2Controller {
     public ModelAndView authenticate(@RequestParam String code, @RequestParam String state, HttpServletRequest request) {
         if (state.equals("topjava_csrf_token_auth")) {
             String accessToken = getAccessToken(code);
-            return authorizeAndRedirect(getLoginAndId(accessToken), getEmail(accessToken), request);
+            return authorizeAndRedirect(getLogin(accessToken), getEmail(accessToken), request);
         }
         return null;
     }
@@ -61,21 +59,19 @@ public class Oauth2Controller {
         return entityEmail.getBody().get(0).get("email").asText();
     }
 
-    private List<String> getLoginAndId(String accessToken) {
+    private String getLogin(String accessToken) {
         UriComponentsBuilder builder = fromHttpUrl(GET_LOGIN_URL).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityUser = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
-        String login = entityUser.getBody().get("login").asText();
-        String id = entityUser.getBody().get("id").asText();
-        return asList(login, id);
+        return entityUser.getBody().get("login").asText();
     }
 
-    private ModelAndView authorizeAndRedirect(List<String> loginAndId, String email, HttpServletRequest request) {
+    private ModelAndView authorizeAndRedirect(String login, String email, HttpServletRequest request) {
         try {
             UserDetails userDetails = service.loadUserByUsername(email);
             getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
             return new ModelAndView("redirect:/meals");
         } catch (UsernameNotFoundException ex) {
-            request.getSession().setAttribute("userTo", new UserTo(loginAndId.get(0), email));
+            request.getSession().setAttribute("userTo", new UserTo(login, email));
             return new ModelAndView("redirect:/register");
         }
     }
