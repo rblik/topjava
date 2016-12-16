@@ -33,6 +33,16 @@
         <!--<csrf disabled="true"/>-->
     </http>
 
+    <beans:bean name="githubSource" class="ru.javawebinar.topjava.web.oauth.OauthSource"
+                p:accessTokenUrl="https://github.com/login/oauth/access_token"
+                p:authorizeUrl="https://github.com/login/oauth/authorize"
+                p:mailUrl="https://api.github.com/user/emails"
+                p:loginUrl="https://api.github.com/user"
+                p:code="topjava_csrf_token_auth"
+                p:redirectUri="https://rblik-topjava.herokuapp.com/oauth/github/callback"
+                p:clientId="#{systemEnvironment['GITHUB_ID']}"
+                p:clientSecret="#{systemEnvironment['GITHUB_SECRET']}"/>
+
     <beans:bean class="ru.javawebinar.topjava.util.PasswordUtil" id="passwordEncoder" factory-method="getPasswordEncoder"/>
 
     <authentication-manager>

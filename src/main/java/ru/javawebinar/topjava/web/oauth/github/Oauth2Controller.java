@@ -15,10 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.javawebinar.topjava.to.UserTo;
+import ru.javawebinar.topjava.web.oauth.OauthSource;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
-import static ru.javawebinar.topjava.web.oauth.github.GitHubOauthData.*;
 
 @Controller
 @RequestMapping("/oauth/github")
@@ -27,10 +27,12 @@ public class Oauth2Controller {
     private RestTemplate template;
     @Autowired
     private UserDetailsService service;
+    @Autowired
+    private OauthSource source;
 
     @RequestMapping("/authorize")
     public String authorize() {
-        return "redirect:" + AUTHORIZE_URL + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&redirect_uri=" + REDIRECT_URI + "&state=" + CODE;
+        return "redirect:" + source.getAuthorizeUrl() + "?client_id=" + source.getClientId() + "&client_secret=" + source.getClientSecret() + "&redirect_uri=" + source.getRedirectUri() + "&state=" + source.getCode();
     }
 
     @RequestMapping("/callback")
@@ -43,23 +45,23 @@ public class Oauth2Controller {
     }
 
     private String getAccessToken(String code) {
-        UriComponentsBuilder builder = fromHttpUrl(ACCESS_TOKEN_URL)
-                .queryParam("client_id", CLIENT_ID)
-                .queryParam("client_secret", CLIENT_SECRET)
+        UriComponentsBuilder builder = fromHttpUrl(source.getAccessTokenUrl())
+                .queryParam("client_id", source.getClientId())
+                .queryParam("client_secret", source.getClientSecret())
                 .queryParam("code", code)
-                .queryParam("redirect_uri", REDIRECT_URI);
+                .queryParam("redirect_uri", source.getRedirectUri());
         ResponseEntity<JsonNode> tokenEntity = template.postForEntity(builder.build().encode().toUri(), null, JsonNode.class);
         return tokenEntity.getBody().get("access_token").asText();
     }
 
     private String getEmail(String accessToken) {
-        UriComponentsBuilder builder = fromHttpUrl(GET_EMAIL_URL).queryParam("access_token", accessToken);
+        UriComponentsBuilder builder = fromHttpUrl(source.getMailUrl()).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityEmail = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
         return entityEmail.getBody().get(0).get("email").asText();
     }
 
     private String getLogin(String accessToken) {
-        UriComponentsBuilder builder = fromHttpUrl(GET_LOGIN_URL).queryParam("access_token", accessToken);
+        UriComponentsBuilder builder = fromHttpUrl(source.getLoginUrl()).queryParam("access_token", accessToken);
         ResponseEntity<JsonNode> entityUser = template.getForEntity(builder.build().encode().toUri(), JsonNode.class);
         return entityUser.getBody().get("login").asText();
     }
