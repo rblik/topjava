@@ -78,6 +78,7 @@
             <a href="http://jquery.com/">jQuery</a>,
             <a href="http://ned.im/noty/">jQuery notification</a>,
             <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+            <a href="https://developer.github.com/v3/oauth/">GitHub OAuth2</a>,
     </div>
 </div>
 <div class="container">

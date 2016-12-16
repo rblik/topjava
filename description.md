@@ -44,11 +44,13 @@
 -  AJAX. jQuery. Notifications.
 -  Spring Security
 -  Spring Binding/Validation
--  Работа с Datatables через Ajax.
+-  Work with Datatables through Ajax.
 -  Spring Security Test
 -  Encoding password
 -  <a href="https://drive.google.com/file/d/0B9Ye2auQ_NsFNDlPZGdUNThzNUU/view">CSRF (adding protection from Cross-Site Request Forgery)</a>
 -  form-login. Spring Security Taglib
 -  Handler interceptor
 -  Spring Exception Handling
+-  Spring RESTFul Client
+-  Oauth2
 -  <a href="https://drive.google.com/open?id=0B9Ye2auQ_NsFZkpVM19QWFBOQ2c">Deploy to Heroku</a>
