@@ -11,10 +11,6 @@ import java.util.Objects;
 
 import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 
-/**
- * GKislin
- * 24.09.2015.
- */
 public class UserTestData {
     private static final Logger LOG = LoggerFactory.getLogger(UserTestData.class);
 

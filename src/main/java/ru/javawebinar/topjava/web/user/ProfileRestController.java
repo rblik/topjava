@@ -8,10 +8,6 @@ import ru.javawebinar.topjava.to.UserTo;
 
 import javax.validation.Valid;
 
-/**
- * GKislin
- * 06.03.2015.
- */
 @RestController
 @RequestMapping(ProfileRestController.REST_URL)
 public class ProfileRestController extends AbstractUserController {

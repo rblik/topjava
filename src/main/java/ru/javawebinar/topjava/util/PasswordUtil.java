@@ -6,10 +6,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
 
-/**
- * GKislin
- * 05.01.2015.
- */
 
 public class PasswordUtil {
     private static final Pattern BCRYPT_PATTERN = Pattern.compile("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");

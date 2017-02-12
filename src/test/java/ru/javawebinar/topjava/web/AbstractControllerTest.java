@@ -21,10 +21,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static ru.javawebinar.topjava.Profiles.ACTIVE_DB;
 import static ru.javawebinar.topjava.Profiles.DB_IMPLEMENTATION;
 
-/**
- * User: gkislin
- * Date: 10.08.2014
- */
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-mvc.xml",

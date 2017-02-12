@@ -16,10 +16,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
-/**
- * User: gkislin
- * Date: 23.09.2014
- */
 @ControllerAdvice(annotations = RestController.class)
 public class ExceptionInfoHandler {
     Logger LOG = LoggerFactory.getLogger(ExceptionInfoHandler.class);

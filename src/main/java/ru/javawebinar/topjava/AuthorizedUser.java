@@ -8,10 +8,6 @@ import ru.javawebinar.topjava.util.UserUtil;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- * GKislin
- * 06.03.2015.
- */
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 1L;
 

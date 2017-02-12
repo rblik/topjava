@@ -1,10 +1,6 @@
 package ru.javawebinar.topjava.util.exception;
 
 
-/**
- * User: gkislin
- * Date: 14.05.2014
- */
 public class ExceptionUtil {
     private ExceptionUtil() {
     }

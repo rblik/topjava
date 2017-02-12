@@ -7,10 +7,6 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import java.util.List;
 
-/**
- * GKislin
- * 27.03.2015.
- */
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepository {

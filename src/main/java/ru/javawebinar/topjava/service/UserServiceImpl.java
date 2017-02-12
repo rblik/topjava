@@ -21,10 +21,6 @@ import static ru.javawebinar.topjava.util.UserUtil.createNewFromTo;
 import static ru.javawebinar.topjava.util.UserUtil.prepareToSave;
 import static ru.javawebinar.topjava.util.UserUtil.updateFromTo;
 
-/**
- * GKislin
- * 06.03.2015.
- */
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 

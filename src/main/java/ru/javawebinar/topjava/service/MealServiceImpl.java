@@ -10,10 +10,6 @@ import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-/**
- * GKislin
- * 06.03.2015.
- */
 @Service
 public class MealServiceImpl implements MealService {
 
