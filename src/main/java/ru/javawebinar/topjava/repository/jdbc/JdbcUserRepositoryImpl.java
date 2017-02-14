@@ -93,6 +93,31 @@ public class JdbcUserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
+
+//        return jdbcTemplate.query("SELECT * FROM users u LEFT OUTER JOIN user_roles ON u.id = user_roles.user_id", new ResultSetExtractor<List<User>>() {
+//            private final Map<Integer, User> map = new HashMap<>();
+//            @Override
+//            public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
+//                while (rs.next()) {
+//                    Role role = Role.valueOf(rs.getString("role"));
+//                    User user = new User();
+//                    user.addRole(role);
+//                    user.setId(rs.getInt("id"));
+//                    user.setName(rs.getString("name"));
+//                    user.setEmail(rs.getString("email"));
+//                    user.setPassword(rs.getString("password"));
+//                    user.setRegistered(rs.getDate("registered"));
+//                    user.setEnabled(rs.getBoolean("enabled"));
+//                    user.setCaloriesPerDay(rs.getInt("calories_per_day"));
+//                    map.merge(user.getId(), user, (oldUser, newUser) -> {
+//                        oldUser.addRole(role);
+//                        return oldUser;
+//                    });
+//                }
+//                return new ArrayList<>(map.values().stream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).collect(Collectors.toList()));
+//            }
+//        });
+
         class UserRole {
             final private int userId;
             final private Role role;
